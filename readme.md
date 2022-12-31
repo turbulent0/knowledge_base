@@ -98,32 +98,32 @@ MOP = method of momentums
 A method for parameter optimization (fitting a model). We choose parameters so as to maximize the likelihood function (how likely the outcome would happen given the current data and our model).
 maximum likelihood estimation (MLE) is a method of estimating the parameters of a statistical model given observations, by finding the parameter values that maximize the likelihood of making the observations given the parameters. MLE can be seen as a special case of the maximum a posteriori estimation (MAP) that assumes a uniform prior distribution of the parameters, or as a variant of the MAP that ignores the prior and which therefore is unregularized.
 for gaussian mixtures, non parametric models, it doesn’t exist
-## A/B testing
-### In an A/B test, how can you check if assignment to the various buckets was truly random?
+### A/B testing
+#### In an A/B test, how can you check if assignment to the various buckets was truly random?
 
 * Plot the distributions of multiple features for both A and B and make sure that they have the same shape. More rigorously, we can conduct a permutation test to see if the distributions are the same.
 * MANOVA to compare different means
 
-### What might be the benefits of running an A/A test, where you have two buckets who are exposed to the exact same product?
+#### What might be the benefits of running an A/A test, where you have two buckets who are exposed to the exact same product?
 
   * Verify the sampling algorithm is random.
 
-### What would be the hazards of letting users sneak a peek at the other bucket in an A/B test?
+#### What would be the hazards of letting users sneak a peek at the other bucket in an A/B test?
 The user might not act the same suppose had they not seen the other bucket. You are essentially adding additional variables of whether the user peeked the other bucket, which are not random across groups.
-### How would you run an A/B test for many variants, say 20 or more?
+#### How would you run an A/B test for many variants, say 20 or more?
 one control, 20 treatment, if the sample size for each group is big enough.
 Ways to attempt to correct for this include changing your confidence level (e.g. Bonferroni Correction) or doing family-wide tests before you dive in to the individual metrics (e.g. Fisher's Protected LSD).
 
-###  How would you run an A/B test if the observations are extremely right-skewed?
+####  How would you run an A/B test if the observations are extremely right-skewed?
 lower the variability by modifying the KPI
 cap values
 percentile metrics
 log transform
 
-###  How would you design an experiment to determine the impact of latency on user engagement?
+#### How would you design an experiment to determine the impact of latency on user engagement?
 The best way I know to quantify the impact of performance is to isolate just that factor using a slowdown experiment, i.e., add a delay in an A/B test.
 
-## Hypotesis testing
+### Hypotesis testing
 
 #### What is a p-value? What is the difference between type-1 and type-2 error?
 A p-value is defined such that under the null hypothesis less than the fraction p of events have parameter values more extreme than the observed parameter. It is not the probability that the null hypothesis is wrong.
