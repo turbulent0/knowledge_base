@@ -295,8 +295,6 @@ finally:
 ### Multithreading code
 
 ```
-
-
 import time
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 
@@ -344,7 +342,21 @@ visualize_runtimes(multithreading(cpu_heavy, range(4), 4), "Multithreading")
 plt.subplot(1, 2, 2)
 visualize_runtimes(multiprocessing(cpu_heavy, range(4), 4), "Multiprocessing")
 plt.show()
+```
 
+**multithreading**
+
+```
+wiki_page_urls = ["https://en.wikipedia.org/wiki/" + str(i) for i in range(50)]
+with concurrent.futures.ThreadPoolExecutor() as executor:
+    futures = []
+    for url in wiki_page_urls:
+        futures.append(executor.submit(get_wiki_page_existence, wiki_page_url=url))
+        # # many parameters
+        # futures.append(executor.submit(lambda p: get_columns_batch(*p),
+        #                         [docs_left_all, docs_right_all, docs_pages_all, batch, model, ith]))
+    for future in concurrent.futures.as_completed(futures):
+        print(future.result())
 ```
 
 ### asyncio code (python 3.9)
@@ -404,8 +416,117 @@ async def main():
 asyncio.run(main())
 ```
 
+ **Сопрограмма (coroutine) ** — результат вызова асинхронной функции, представляющий собой выполнение этой функции, способное приостанавливаться. Так как в общем случае невозможно определить сколько раз и на какое время выполнение будет приостановлено, невозможно и сказать когда оно будет закончено. Ваш код может либо ждать завершения выполнения сопрограммы с помощью оператора await, либо поручить ожидание циклу событий и продолжить свой выполнение.
 
-## 7. Input output
+**В первом случае**
+
+```
+async def callee():
+    print('Hello')
+
+async def caller():
+    await callee()
+    print('World')
+```
+
+выполнение caller приостановится до выполнения callee. В этот момент какие-то другие операции в каких-то других сопрограммах могут продолжаться, но `caller` будет ждать там, где выполнил `await`.
+
+Во втором случае
+
+```
+async def callee():
+    print('Hello')
+
+async def caller():
+    asyncio.create_task(callee())
+    print('World')
+```
+
+**caller** сразу же продолжит свою работу. Строка `"World"` будет выведена раньше, чем "`Hello".` Здесь мы видим, что caller поставил циклу событий задачу выполнить сопрограмму callee.
+
+Но что если, callee будет возвращать какое-то значение, которое нужно вызывающей стороне, но не прямо сейчас, а когда будет готово? Вот тут-то на сцену выходят футуры.
+
+ **Футура (Future) ** - будущий результат выполнения сопрограммы. Метод `ensure_future` поручает циклу событий выполнить сопрограмму и сразу же, в момент вызова, возвращает футуру, в которой будет значение, но неизвестно когда. Вызывающая сторона может подождать выполнения футуры так же, как ожидало саму сопрограмму
+
+**wait future**
+
+```python
+async def callee(fut, word):
+    fut.set_result(word)
+
+async def caller():
+    loop = asyncio.get_running_loop()
+    # Create a new Future object.
+    fut = loop.create_future()
+    # Run "set_after()" coroutine in a parallel Task.
+    # We are using the low-level "loop.create_task()" API here because
+    # we already have a reference to the event loop at hand.
+    # Otherwise we could have just used "asyncio.create_task()".
+    loop.create_task(callee(fut, '... world'))
+    # Wait until *fut* has a result (1 second) and print it.
+    print(await fut + ' Hello')
+
+await caller() # for jupyter notebook, becouse loop is already running in jupyter
+# asyncio.run(main()) # for py file
+```
+
+**do something while future is not done**
+
+```python
+async def callee(fut, word):
+    await asyncio.sleep(4)
+    fut.set_result(word)
+
+async def caller():
+    loop = asyncio.get_running_loop()
+    # Create a new Future object.
+    fut = loop.create_future()
+    loop.create_task(callee(fut, '... world'))
+    while not fut.done():
+        await asyncio.sleep(1)
+        print('do something when fut is running')
+
+    print(await fut + ' World')
+
+await caller() # for jupyter notebook, becouse loop is already running in jupyter
+```
+
+**callback**
+
+```python
+import functools
+async def callee(fut, word):
+    await asyncio.sleep(4)
+    fut.set_result(word)
+
+async def caller():
+    loop = asyncio.get_running_loop()
+    # Create a new Future object.
+    fut = loop.create_future()
+    loop.create_task(callee(fut, '... world'))
+    fut.add_done_callback(functools.partial(print, "Future:"))
+    print('test')
+```
+
+**asyncio concurrent**
+
+```python
+async def main():
+    await function_that_returns_a_future_object() # task
+
+    # this is also valid:
+    await asyncio.gather(
+        function_that_returns_a_future_object(),
+        some_python_coroutine()
+    )
+
+all_the_coros = asyncio.gather(
+*[self._worker(i) for i in range(self.max_workers)])
+async def _worker(self, i):
+    return
+```
+
+## 7. Input output 
 
 ### Как прочитать файл объемом 8 ГБ на Python с помощью компьютера с 2 ГБ ОЗУ
 
