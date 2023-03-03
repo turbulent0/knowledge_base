@@ -155,6 +155,27 @@ if(obj instanceof Person){
 
 isinstance(foo, object))
 
+### reflection
+
+Интроспекция позволяет вам изучать атрибуты объекта во время выполнения программы, а **рефлексия** — манипулировать ими.
+
+**Рефлексия** — это способность компьютерной программы изучать и модифицировать свою структуру и поведение (значения, мета-данные, свойства и функции) во время выполнения.
+
+ Простым языком: она позволяет вам *вызывать методы объектов, создавать новые объекты, модифицировать их, даже не зная имён интерфейсов, полей, методов во время компиляции.*
+
+ Из-за такой природы **рефлексии** её труднее реализовать в статически типизированных языках, поскольку ошибки типизации возникают во время компиляции, а не исполнения программы (подробнее об этом здесь). Тем не менее, она возможна, ведь такие языки, как Java, C# и другие допускают использование как интроспекции, так и **рефлексии** (но не C++, он позволяет использовать лишь интроспекцию).
+
+По той же причине **рефлексию** проще реализовать в интерпретируемых языках, поскольку когда функции, объекты и другие структуры данных создаются и вызываются во время работы программы, используется какая-то система распределения памяти. Интерпретируемые языки обычно предоставляют такую систему по умолчанию, а для компилируемых понадобится дополнительный компилятор и интерпретатор, который следит за **корректностью рефлексии.**
+
+**Пример:**
+
+`# Без рефлексии
+Foo().hello()
+
+с рефлексией
+
+getattr(globals()[&#39;Foo&#39;](), 'hello')
+
 ### descriptor
 
 **Дескриптор** - такой атрибут объекта, поведение которого переопределяется специальными методами. Проще говоря, доступ к какому-то свойству экземпляра можно переопределить с учетом дополнительных проверок. Если делать эти верификации без дескрипторов, то один и тот же код начнет повторяться.
@@ -536,6 +557,44 @@ with open("./large_dataset.txt") as input_file:
 
 # Statistic and probability
 
+### exp distribution vs poisson
+
+https://www.youtube.com/watch?v=n7K8s4vryCQ&ab_channel=ExplainedbyMichael
+
+exp and pois distribution are from poisson process:
+
+1) memoryless, all events are independent
+2) average time between events is known and constant
+3) events cannot occure simultelesnly ( tine interval between events as Bernully trial (event happen or not))
+
+Poisson dist can be used as approx of binomial distribution, if n is sufficiently large and p is sufficiently small
+
+Pois(k, lambda = n * p) = B( k, n, p)
+
+Exp:       										Poisson:
+
+1. how much time between given number of		1. How many events in given time interval (fixed time)
+
+events ( fixed events)
+
+2. Random var - time							2. number of enents - descrete
+3. lambda - rate of occurance(customers per hour,	3. lambda - expected number of occurences ( number of customers every period, unitless)
+   measure - time ^(-1), frequency, time)			4. can approx bernully when large n, and small p
+4. special case of gamma (shape=1,  scale = 1/lambda)
+5. continuous of geometric ( time until event occurs)
+
+### probability vs likelihood
+
+˚probability = given distribution find probability of events
+
+pr(x1, x2, x3, x4| distr)
+
+likelihood - given data find likelihood of distribution (statistics)
+
+L(distr|x1, x2, x3, x4)
+
+**probability is the quantity most people are familiar with which deals with predicting new data given a known model ("what is the probability of getting heads six times in a row flipping this **[50:50](https://www.youtube.com/watch?v=pYxNSUDSFH4&t=3050s) coin?") while likelihood deals with fitting models given some known data ("what is the likelihood that this coin is/isn't rigged given that I just flipped heads six times in a row?"). I wanted to add this perspective because using the example in this clip, a likelihood quantity such as 0.12 is not meaningful to the layman unless it is explained exactly what 0.12 means: a measure of the sample's support for the assumed model i.e. low values either mean rare data or incorrect model!
+
 ### Map, MLE and MOP
 
 [https://en.wikipedia.org/wiki/Maximum_a_posteriori_estimation]()
@@ -626,7 +685,25 @@ Unbiasedness means that the expectation of the estimator is equal to the populat
 
 # ML
 
+How to make normal distribution:
+
+- log transform
+- square root
+- reciprocal
+- box -cox transform (all three previous in one)
+
 ## Metrics
+
+## нечеткое сравнение строк
+
+1) Алгоритм Левенштейна уже посложней, в его основе расчет количества операций, необходимых для преобразования одной строки в другую. Существует 3 таких операции:
+
+* вставка символа (сыто → сыт**н**о);
+* удаление символа (гидра**н**т → гидрат);
+* замена одного символа на другой (**у**своить → **о**своить).
+
+2) В алгоритме Дамерау-Левенштейна добавляется дополнительная операция транспозиции
+3) Расстояние Джаро-Винклера основывается на поиске точных и неточных совпадений в анализируемых строках. Под точным совпадением подразумевается совпадение значения и порядкового номера символа, под неточным — совпадение значения и порядкового номера символа ± длина совпадений L.
 
 ## What is the curse of dimensionality?
 
@@ -647,6 +724,12 @@ Explicit regularization is regularization whenever one explicitly adds a term to
 Implicit regularization is all other forms of regularization. This includes, for example, early stopping, using a robust loss function, and discarding outliers. Implicit regularization is essentially ubiquitous in modern machine learning approaches, including stochastic gradient descent for training deep neural networks, and ensemble methods (such as random forests and gradient boosted trees).
 
 ## Linear regression
+
+### regression
+
+regression means regress (step back ) to the best fit line (co-relation line)
+
+y = f(x) + error (normal distribution with 0 mean)
 
 ### our linear regression didn’t run and communicates that there are an infinite number of best estimates for the regression coefficients. What could be wrong?
 
