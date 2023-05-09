@@ -1,4 +1,34 @@
-# knowledge wiki
+# knowledge_wiki_git
+
+# Table of contents
+
+- Python
+    - Data structures
+        - type annotation, type conversion (implicit and explicit)
+        - Strings
+        - string interpolation
+        - Lists
+        - copy and deepcopy()
+        - list and array
+    - Operators
+        - difference == and is
+    - Design patterns
+        - Decorators
+        - Assigning arguments of function
+    - OOP
+        - exemple (self, ), class(cls, ) and static () methods
+        - func and func()
+        - How to change the way objects are output?
+        - operator overloading
+        - ORM
+    - Modules
+        - Модуль, пакет, библиотека
+        - How would you use *args and **kwargs?
+    - Exceptions
+        - example
+    - Multiprocessing and multithreading
+        - What is the problem with multiprocessing in Python?
+        - What is the difference between multiprocessing and multithreading?
 
 # Python
 
@@ -72,9 +102,7 @@ def logging(func): def log_function_called(): print(f’{func} called.’) func(
 
 ### Assigning arguments of function
 
-В Python аргументы передаются путем присваивания.(official guide
-Фактические параметры (аргументы) вызова функции вводятся в локальную таблицу символов вызываемой функции при ее вызове; таким образом, аргументы передаются с использованием вызова по значению, «где значение всегда является ссылкой на объект, а не значением объекта», там же сноска добавляет:
-На самом деле, «вызов по ссылке на объект» был бы лучшим описанием, поскольку, если передается изменяемый (mutable) объект, вызывающая сторона увидит любые изменения, внесенные в нее вызываемой стороной (элементы, вставленные в 
+В Python аргументы передаются путем присваивания.(official guide Фактические параметры (аргументы) вызова функции вводятся в локальную таблицу символов вызываемой функции при ее вызове; таким образом, аргументы передаются с использованием вызова по значению, «где значение всегда является ссылкой на объект, а не значением объекта», там же сноска добавляет: На самом деле, «вызов по ссылке на объект» был бы лучшим описанием, поскольку, если передается изменяемый (mutable) объект, вызывающая сторона увидит любые изменения, внесенные в нее вызываемой стороной (элементы, вставленные в
 
 ## 3.OOP
 
@@ -125,7 +153,7 @@ package is catalog with modules, all packages are moduls, library is catalog wit
 - args и **kwargs – это конструкции, которые делают функции Python более гибкими, принимая изменчивое количество аргументов.
 - args передаёт изменчивое количеств
 - во аргументов без ключевых слов в список
-- *kwargs передаёт изменчивое количество аргументов с ключевыми словами в словарь
+- kwargs передаёт изменчивое количество аргументов с ключевыми словами в словарь
 
 ## 5. Exceptions
 
@@ -232,17 +260,23 @@ Sample - статистическая оценка, population - оценива�
 
 Смещенная и состоятельная оценка
 
-![https://www.notion.soconsistent.png](https://www.notion.soconsistent.png)
+[https://www.notion.soconsistent.png](https://www.notion.soconsistent.png)
+
+https://www.notion.soconsistent.png
 
 Alt text
 
 In [statistics](https://en.wikipedia.org/wiki/Statistics), the **bias of an estimator** (or **bias function** ) is the difference between this [estimator](https://en.wikipedia.org/wiki/Estimator)’s [expected value](https://en.wikipedia.org/wiki/Expected_value) and the [true value](https://en.wikipedia.org/wiki/True_value) of the parameter being estimated. An estimator or decision rule with zero bias is called ***unbiased*** . In statistics, “bias” is an *objective* property of an estimator. Bias is a distinct concept from [consistency](https://en.wikipedia.org/wiki/Consistent_estimator): consistent estimators converge in probability to the true value of the parameter, but may be biased or unbiased; see [bias versus consistency](https://en.wikipedia.org/wiki/Consistent_estimator#Bias_versus_consistency) for more.ML
 
-![https://www.notion.sobiasedness.png](https://www.notion.sobiasedness.png)
+[https://www.notion.sobiasedness.png](https://www.notion.sobiasedness.png)
+
+https://www.notion.sobiasedness.png
 
 Alt text
 
 ![https://www.notion.so../../../Downloads/biased2.png](https://www.notion.so../../../Downloads/biased2.png)
+
+https://www.notion.so../../../Downloads/biased2.png
 
 An estimator is said to be
 
@@ -293,7 +327,7 @@ You have several variables that are positively correlated with your response, an
 
 Calibrationclassifiercv in sklearn
 
-[calibration of lightgbm (log regression for leaves)](https://www.notion.so/calibration-of-lightgbm-log-regression-for-leaves-bf8f65b6114d4493be7c0855be318ef3) 
+[calibration of lightgbm (log regression for leaves)](https://www.notion.so/calibration-of-lightgbm-log-regression-for-leaves-bf8f65b6114d4493be7c0855be318ef3)
 
 ## Linear regression
 
@@ -322,9 +356,7 @@ Explicit regularization is regularization whenever one explicitly adds a term to
 
 ## Data modelling
 
- ED Modeler is a tool used for designing and analyzing data structures with standardized designs, it supports deployment of diagrammatic data, regardless of its location and structure, it offers automated features to generate schema and hybrid architecture.
-Key features:
-Visual data modeling: Create data models using a visual interface, making it easy to see the relationships between different entities and data elements.
+ED Modeler is a tool used for designing and analyzing data structures with standardized designs, it supports deployment of diagrammatic data, regardless of its location and structure, it offers automated features to generate schema and hybrid architecture. Key features: Visual data modeling: Create data models using a visual interface, making it easy to see the relationships between different entities and data elements.
 
 Reverse engineering: Reverse engineer existing databases to create a visual representation of the data structures.
 
