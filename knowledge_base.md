@@ -77,6 +77,86 @@ Identity (is) and equality (==), can check by id(var), same or note memory cell
 
 ## 2.Design patterns
 
+### Data classes
+
+```python
+
+from typing importAny, Optional
+from operator import attrgetterclassFieldAttributes:
+
+class FieldAttributes:
+"""
+  Field attributes.
+  We will want to access these dynamically
+  """
+  example: Any
+  default: Any
+  description: Optional[str]def__init__(self, example=None, default=None, description=None):
+    self.example = example
+    self.default = default
+    self.description = descriptionclassField(FieldAttributes):
+
+class Field(FieldAttributes):
+"""Class representing a field"""
+  name: str
+  attrs: FieldAttributesdef__init__(self, name, **kwargs):
+    self.name = name
+    self.attrs = FieldAttributes(**kwargs)
+
+class UserData:
+"""Class representing our user data"""    name = Field("user_name", example="Willy Wonka")
+    country = Field("country", default="USA", example="Wonka-land")
+    n_wonka_bars = Field("n_wonka_bars", default=0, example=11)
+    has_golden_ticket = Field("has_golden_ticket", default=False)
+    is_an_oompa_loompa = Field("is_an_oompa_loompa",
+      description="Is this person an Oompa Loompa?"
+    )
+    fields = (
+        name,
+        country,
+        n_wonka_bars,
+        has_golden_ticket,
+        is_an_oompa_loompa
+    )
+```
+
+### Declarative and imperative coding
+
+* **Imperative code (non-declarative)** tells your compiler what a program does, step by step. The compiler cannot skip steps, because each step is completely dependent on the previous step.
+* **Declarative code** tells your compiler what a program’s desired state should be, abstracting the steps how to achieve it. The compiler can skip steps or combine them, since it can determine ahead of time all of the states.
+
+`list[0]` is [non-declarative](https://medium.com/educative/declarative-vs-imperative-programming-5-key-differences-36b75e4d69e5) >> meaning, your program has no guarantee what the attribute will be, until it gets it
+
+```python
+from operator import is_not
+from functools import partial
+
+def  get_first_non_null_generator(my_vals: list, default=None):
+	"""
+    	Get first non-null value using
+    	a generator (via filter).
+  
+	"""
+
+    '''create generator values'''
+
+    filtered_vals = filter(partial(is_not, None), my_vals)
+    return next(filtered_vals, default)
+```
+
+Imperative - because we know state of returned value (is not None)
+
+```python
+my_doc = {
+"field_1": "one",
+"field_2": "two"
+}
+res =
+ get_first_non_null_generator(
+map(my_doc.get, ("field_1", "field_2"))
+)
+```
+
 ### Decorators
 
 Function of function and return function (logger, get time of execution)
@@ -117,8 +197,10 @@ There  3 main entities:
 > git commit -m "Add raw data"
 > git push
 > 1.4 dvc push - push to remote storage **cache**
-> Make changes dvc add data & git commit & dvc push
+> Make changes dvc add data & git commit & git push
 > Switch between versions git checkout & dvc checkout
+>
+> **dvc pull**
 > 2. remote cache
 > 1.1 dvc init
 > git status
@@ -685,7 +767,7 @@ Unbiasedness means that the expectation of the estimator is equal to the populat
 
 # ML
 
-How to make normal distribution:
+## How to make normal distribution:
 
 - log transform
 - square root
@@ -694,7 +776,26 @@ How to make normal distribution:
 
 ## Metrics
 
-## нечеткое сравнение строк
+## NLP
+
+### nlp preprocessing
+
+Перед обучением модели классификации необходимо провести  *предварительную обработку текста* , используя следующие методы:
+
+ **▪** Лемматизация / стемминг
+ **▪** Приведение слов в нижний регистр
+ **▪** Исключение стоп-слов из текста
+ **▪** Удаление пунктуации, союзов, предлогов, частиц
+ **▪** Очистка текстов от часто встречающихся слов
+ **▪** Токенизация
+
+### lemmatization, stemming
+
+*Лемматизация* - приведение слова в его начальную форму в зависимости от конекста. Например: для слов " *решал* ", " *решала* ", " *решаемые* " начальная форма будет - "решать". Чтобы ваша модель классификации не считала эти слова разными - используем лемматизацию, чем повысим производительность и точность
+
+**Стемминг** - удаление окончаний слов. Например: для слов " *красивый* ", " *красивое* ", " *красивые* " результатом будет - " *красив* ". Используется для тех же целей, что и лемматизация
+
+### нечеткое сравнение строк
 
 1) Алгоритм Левенштейна уже посложней, в его основе расчет количества операций, необходимых для преобразования одной строки в другую. Существует 3 таких операции:
 
@@ -762,5 +863,87 @@ You have several variables that are positively correlated with your response, an
 * Multicollinearity refers to a situation in which two or more explanatory variables in a [multiple regression](https://en.wikipedia.org/wiki/Multiple_regression "Multiple regression") model are highly linearly related.
 * Leave the model as is, despite multicollinearity. The presence of multicollinearity doesn't affect the efficiency of extrapolating the fitted model to new data provided that the predictor variables follow the same pattern of multicollinearity in the new data as in the data on which the regression model is based.
 * principal component regression
+
+# Databases, pandas, DataFrame
+
+## Datasets
+
+Yahoo webscope, kaggle, google datasets, FiveThirtyEight, githubs awesome, UCI, Pew Research Center (culture, sociology, social networks), data.world, buzzfeed
+
+• Данными обучения называются данные, применяемые для тренировки алгоритма машинного обучения.
+
+• Точность модели зависит от используемых данных — подавляющую часть времени дата-инженер занимается подготовкой качественных данных обучения.
+
+• Контролируемое обучение использует размеченные данные, а неконтролируемое использует сырые, неразмеченные данные.
+
+• Необходимы высококачественные наборы данных для обучения и валидации и отдельный независимый набор данных для тестирования.
+
+• Золотой набор (gold set) — это выборка [точно размеченных данных](https://www.v7labs.com/blog/data-annotation-guide), идеально отображающая то, как должна выглядеть правильная разметка.
+
+• Чтобы достичь качественных результатов, необходим существенный объём данных обучения для репрезентации всех возможных случаев с не менее чем 1000 сэмплов данных.
+
+• 4 характеристики качественных данных обучения: релевантность содержимого, постоянство, однородность и полнота.
+
+• Используемые вами инструменты очистки, разметки и аннотирования данных играют важнейшую роль в том, чтобы готовую модель можно было использовать в реальных условиях
+
+Количество данны х - 10 * степеней свободы(основных фич), кривая обучения (когда добавляем новые, как меняются метрики)
+
+Сколько данных уже есть в системе?
+
+Дисперсия классов
+
+Насколько разрежена репрезентация меток, которые вам нужно распознавать?
+
+Если ваша цель заключается в распознавании очень равномерного набора объектов, то вы можете обойтись несколькими тысячами примеров
+
+Тип классификации
+
+Вы выполняете [распознавание объектов](https://www.v7labs.com/blog/object-detection-guide) или [семантическую сегментацию](https://www.v7labs.com/blog/semantic-segmentation-guide)?
+
+Текущие изменения
+
+Будет ли ваше распределение (содержимое того, что должен представлять собой набор данных) меняться со временем?s
+
+Сложность вашей модели
+
+Чем больше весов в вашей модели, тем больше требуется данных обучения.
+
+## pandas functions
+
+! pd.cut()  - divide continious feature in categories (bins)
+
+pd.explode()  - column of lists to columns with element of list
+
+pd.qcut()  - divide in quantiles, for categorical vars
+
+df.nlargest - n largest elements in column
+
+!assign(over_three_hours=lambda dataframe: np.where(dataframe["duration"] > 180, "Yes", "No"))  # Create new column called over_three_hours depending on duration > 180
+
+# Useful libraries (python, DS)
+
+anonympy - anonimization of tabular, visual and pdf data
+
+folium - visualization of interactive maps
+
+# SQL
+
+## Data modelling
+
+ED Modeler is a tool used for designing and analyzing data structures with standardized designs, it supports deployment of diagrammatic data, regardless of its location and structure, it offers automated features to generate schema and hybrid architecture. Key features: Visual data modeling: Create data models using a visual interface, making it easy to see the relationships between different entities and data elements.
+
+Reverse engineering: Reverse engineer existing databases to create a visual representation of the data structures.
+
+Forward engineering: Generate SQL scripts or DDL statements based on the data model, to create or modify databases directly from the data model.
+
+Collaboration: Multiple users can work on a data model simultaneously, making it easy for teams to collaborate on data modeling projects.
+
+Documentation: Generate detailed documentation of data models, including a list of entities, attributes, and relationships.
+
+Data governance: Allows organizations to enforce data governance policies and ensure compliance with industry standards and regulations.
+
+Integration: Easy integration with database management systems, data warehousing solutions, and business intelligence tools.
+
+Data modeling: Create visual data models, including entity-relationship diagrams (ERDs) and data flow diagrams (DFDs)
 
 # System Design
