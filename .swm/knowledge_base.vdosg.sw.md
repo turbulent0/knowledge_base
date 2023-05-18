@@ -4,7 +4,6 @@ title: knowledge_base
 file_version: 1.1.2
 app_version: 1.8.1
 ---
-
 # Python
 
 ## 1\. Data structures
@@ -15,7 +14,7 @@ app_version: 1.8.1
 
 Например `price: int = 5`
 
-*   Implicit
+* Implicit
 
 Неявное преобразование типов автоматически выполняется интерпретатором Python.
 
@@ -27,7 +26,7 @@ float_number = 1.23
 new_number = integer_number + float_number
 ```
 
-*   Explicit
+* Explicit
 
 Явное преобразование типов также называется приведением типов, типы данных объекта преобразуются с использованием предопределенной функции.
 
@@ -51,11 +50,9 @@ deepcopy - new object, and every element ref on copy, but when change, new eleme
 
 #### list and array
 
-*   array same data type
-
-*   array +, - linear operations, different methods append
-
-*   arrays less memory
+* array same data type
+* array +, - linear operations, different methods append
+* arrays less memory
 
 ## 1.5 Queue types in python
 
@@ -126,9 +123,8 @@ class UserData:
 
 ### Declarative and imperative coding
 
-*   **Imperative code (non-declarative)** tells your compiler what a program does, step by step. The compiler cannot skip steps, because each step is completely dependent on the previous step.
-
-*   **Declarative code** tells your compiler what a program’s desired state should be, abstracting the steps how to achieve it. The compiler can skip steps or combine them, since it can determine ahead of time all of the states.
+* **Imperative code (non-declarative)** tells your compiler what a program does, step by step. The compiler cannot skip steps, because each step is completely dependent on the previous step.
+* **Declarative code** tells your compiler what a program’s desired state should be, abstracting the steps how to achieve it. The compiler can skip steps or combine them, since it can determine ahead of time all of the states.
 
 `list[0]` is [non-declarative](https://medium.com/educative/declarative-vs-imperative-programming-5-key-differences-36b75e4d69e5) >> meaning, your program has no guarantee what the attribute will be, until it gets it
 
@@ -174,18 +170,15 @@ Function of function and return function (logger, get time of execution)
 
 def logging(func): def log\_function\_called(): print(f'{func} called.') func() return log\_function\_called
 
-### DVC - data version control
+### DVC - data version controlThere 3 main entities:
 
-There 3 main entities:
-
-*   output (real files of projects) - data folder in example
-
-*   cache (hashes of files, flat structure for tracking data changes)
-
-*   remote (local external) storage (need access) - remote cache or(and) output
+* > output (real files of projects) - data folder in example
+  >
+* cache (hashes of files, flat structure for tracking data changes)
+* remote (local external) storage (need access) - remote cache or(and) output
 
 > CREATE dvc in repo +1. dvc with local storage of cache and outputs (example im\_sales) you need do dvc folder "data 1.1 dvc init git status Changes to be committed: new file: .dvc/.gitignore new file: .dvc/config ... git commit -m "Initialize DVC" 1.2 dvc remote add {name} 'path/to/remote/**cache** storage (for cache) - can be local path ('C:\_Work\\datasets or ) 1.3 dvc add data (adds outputs to local cache (.dvc/cache)) -> data.dvc git add data/data.xml.dvc (add .) git commit -m "Add raw data" git push 1.4 dvc push - push to remote storage **cache** Make changes dvc add data & git commit & git push Switch between versions git checkout & dvc checkout
-> 
+>
 > **dvc pull** 2. remote cache 1.1 dvc init git status Changes to be committed: new file: .dvc/.gitignore new file: .dvc/config ... git commit -m "Initialize DVC" 1.2 dvc remote add {name} 'path/to/remote/**cache** storage (for cache) - can be local path ('C:\_Work\\datasets or ) 1.3 dvc config cache.s3 {name} 1.4 dvc add **data** (local data) -> data.dvc then git commit & git push dvc add --external path/to/**data** (external data) -> data.dvc, then git commit&git push
 
 USAGE and REPRODUCTION of repo for others (im\_sales)
@@ -293,6 +286,16 @@ class Employee:
 
 func - object, you can use it as attribute, as var, func() - call of func
 
+### Is function in python a instance of class?
+
+In Python, the built-in type `function` represents functions. It is the type to which functions belong. When you define a function in Python, it becomes an instance of the `function` type.
+
+Type is represented as class.
+
+In Python, the `function` type is implemented as a class, which means that functions are instances of the `function` class. This class is one of the built-in classes provided by Python. Therefore, functions in Python can be considered as objects of the `function` class.
+
+To clarify, the `function` type is both a class and the type of functions in Python. It is a special built-in class specifically designed to handle function objects.
+
 ### Как изменить способ вывода объектов?
 
 Используйте методы **str** и \__repr_ _str_ - readable **repr** - unumbigous str(3) == str("3")
@@ -300,7 +303,7 @@ func - object, you can use it as attribute, as var, func() - call of func
 ### перегрузка операторов
 
 > под операторами в данном контексте понимаются не только знаки +, -, \*, /, обеспечивающие операции сложения, вычитания и др., но также специфика синтаксиса языка, обеспечивающая операции создания объекта, вызова объекта как функции, обращение к элементу объекта по индексу, вывод объекта
-> 
+>
 > **call**, **getitem**
 
 ### ORM
@@ -325,11 +328,9 @@ package is catalog with modules, all packages are moduls, library is catalog wit
 
 \*args и \*\*kwargs – это конструкции, которые делают функции Python более гибкими, принимая изменчивое количество аргументов.
 
-*   \*args передаёт изменчивое количеств
-
-*   во аргументов без ключевых слов в список
-
-*   \*\*kwargs передаёт изменчивое количество аргументов с ключевыми словами в словарь
+* \*args передаёт изменчивое количеств
+* во аргументов без ключевых слов в список
+* \*\*kwargs передаёт изменчивое количество аргументов с ключевыми словами в словарь
 
 ## 5\. Exceptions
 
@@ -422,7 +423,7 @@ with concurrent.futures.ThreadPoolExecutor() as executor:
 
 ### asyncio code (python 3.9)
 
-We say that an object is an **awaitable** object if it can be used in an [code class="code-span"<span class="pre">await</span>](https://docs.python.org/3.9/reference/expressions.html#await) expression. Many asyncio APIs are designed to accept awaitables.
+We say that an object is an **awaitable** object if it can be used in an [code class=&#34;code-span&#34;`<span class="pre">`await](https://docs.python.org/3.9/reference/expressions.html#await) expression. Many asyncio APIs are designed to accept awaitables.
 
 There are three main types of _awaitable_ objects: **coroutines** , **Tasks** , and **Futures** .
 
@@ -430,9 +431,8 @@ Important
 
 In this documentation the term “coroutine” can be used for two closely related concepts:
 
-*   a _coroutine function_ : an **async def** function;
-
-*   a _coroutine object_ : an object returned by calling a _coroutine function_ .
+* a _coroutine function_ : an **async def** function;
+* a _coroutine object_ : an object returned by calling a _coroutine function_ .
 
 Tasks are used to schedule coroutines concurrently. A Future is a special low-level awaitable object that represents an eventual result of an asynchronous operation
 
@@ -597,15 +597,13 @@ with open("./large\_dataset.txt") as input\_file: for line in input\_file: proce
 
 ### exp distribution vs poisson
 
-[https://www.youtube.com/watch?v=n7K8s4vryCQ&ab\_channel=ExplainedbyMichael](https://www.youtube.com/watch?v=n7K8s4vryCQ&ab_channel=ExplainedbyMichael)
+[https://www.youtube.com/watch?v=n7K8s4vryCQ&amp;ab\_channel=ExplainedbyMichael](https://www.youtube.com/watch?v=n7K8s4vryCQ&ab_channel=ExplainedbyMichael)
 
 exp and pois distribution are from poisson process:
 
-1.  memoryless, all events are independent
-
-2.  average time between events is known and constant
-
-3.  events cannot occure simultelesnly ( tine interval between events as Bernully trial (event happen or not))
+1. memoryless, all events are independent
+2. average time between events is known and constant
+3. events cannot occure simultelesnly ( tine interval between events as Bernully trial (event happen or not))
 
 Poisson dist can be used as approx of binomial distribution, if n is sufficiently large and p is sufficiently small
 
@@ -613,17 +611,14 @@ Pois(k, lambda = n \* p) = B( k, n, p)
 
 Exp: Poisson:
 
-1.  how much time between given number of 1. How many events in given time interval (fixed time)
+1. how much time between given number of 1. How many events in given time interval (fixed time)
 
 events ( fixed events)
 
-2.  Random var - time 2. number of enents - descrete
-
-3.  lambda - rate of occurance(customers per hour, 3. lambda - expected number of occurences ( number of customers every period, unitless) measure - time ^(-1), frequency, time) 4. can approx bernully when large n, and small p
-
-4.  special case of gamma (shape=1, scale = 1/lambda)
-
-5.  continuous of geometric ( time until event occurs)
+2. Random var - time 2. number of enents - descrete
+3. lambda - rate of occurance(customers per hour, 3. lambda - expected number of occurences ( number of customers every period, unitless) measure - time ^(-1), frequency, time) 4. can approx bernully when large n, and small p
+4. special case of gamma (shape=1, scale = 1/lambda)
+5. continuous of geometric ( time until event occurs)
 
 ### probability vs likelihood
 
@@ -673,13 +668,12 @@ A method for parameter optimization (fitting a model). We choose parameters so a
 
 #### In an A/B test, how can you check if assignment to the various buckets was truly random?
 
-*   Plot the distributions of multiple features for both A and B and make sure that they have the same shape. More rigorously, we can conduct a permutation test to see if the distributions are the same.
-
-*   MANOVA to compare different means
+* Plot the distributions of multiple features for both A and B and make sure that they have the same shape. More rigorously, we can conduct a permutation test to see if the distributions are the same.
+* MANOVA to compare different means
 
 #### What might be the benefits of running an A/A test, where you have two buckets who are exposed to the exact same product?
 
-*   Verify the sampling algorithm is random.
+* Verify the sampling algorithm is random.
 
 #### What would be the hazards of letting users sneak a peek at the other bucket in an A/B test?
 
@@ -763,13 +757,10 @@ Unbiasedness means that the expectation of the estimator is equal to the populat
 
 ## How to make normal distribution:
 
-*   log transform
-
-*   square root
-
-*   reciprocal
-
-*   box -cox transform (all three previous in one)
+* log transform
+* square root
+* reciprocal
+* box -cox transform (all three previous in one)
 
 ## Metrics
 
@@ -789,29 +780,23 @@ _Лемматизация_ - приведение слова в его нача�
 
 ### нечеткое сравнение строк
 
-1.  Алгоритм Левенштейна уже посложней, в его основе расчет количества операций, необходимых для преобразования одной строки в другую. Существует 3 таких операции:
-*   вставка символа (сыто → сыт**н**о);
+1. Алгоритм Левенштейна уже посложней, в его основе расчет количества операций, необходимых для преобразования одной строки в другую. Существует 3 таких операции:
 
-*   удаление символа (гидра**н**т → гидрат);
+* вставка символа (сыто → сыт**н**о);
+* удаление символа (гидра**н**т → гидрат);
+* замена одного символа на другой (**у**своить → **о**своить).
 
-*   замена одного символа на другой (**у**своить → **о**своить).
-2.  В алгоритме Дамерау-Левенштейна добавляется дополнительная операция транспозиции
-
-3.  Расстояние Джаро-Винклера основывается на поиске точных и неточных совпадений в анализируемых строках. Под точным совпадением подразумевается совпадение значения и порядкового номера символа, под неточным — совпадение значения и порядкового номера символа ± длина совпадений L.
+2. В алгоритме Дамерау-Левенштейна добавляется дополнительная операция транспозиции
+3. Расстояние Джаро-Винклера основывается на поиске точных и неточных совпадений в анализируемых строках. Под точным совпадением подразумевается совпадение значения и порядкового номера символа, под неточным — совпадение значения и порядкового номера символа ± длина совпадений L.
 
 ## What is the curse of dimensionality?
 
-*   High dimensionality makes clustering hard, because having lots of dimensions means that everything is "far away" from each other.
-
-*   For example, to cover a fraction of the volume of the data we need to capture a very wide range for each variable as the number of variables increases
-
-*   All samples are close to the edge of the sample. And this is a bad news because prediction is much more difficult near the edges of the training sample.
-
-*   The sampling density decreases exponentially as p increases and hence the data becomes much more sparse without significantly more data.
-
-*   We should conduct PCA to reduce dimensionality
-
-*    
+* High dimensionality makes clustering hard, because having lots of dimensions means that everything is "far away" from each other.
+* For example, to cover a fraction of the volume of the data we need to capture a very wide range for each variable as the number of variables increases
+* All samples are close to the edge of the sample. And this is a bad news because prediction is much more difficult near the edges of the training sample.
+* The sampling density decreases exponentially as p increases and hence the data becomes much more sparse without significantly more data.
+* We should conduct PCA to reduce dimensionality
+* 
 
 ## regularization
 
@@ -831,9 +816,8 @@ y = f(x) + error (normal distribution with 0 mean)
 
 ### our linear regression didn’t run and communicates that there are an infinite number of best estimates for the regression coefficients. What could be wrong?
 
-*   p > n.
-
-*   If some of the explanatory variables are perfectly correlated (positively or negatively) then the coefficients would not be unique.
+* p > n.
+* If some of the explanatory variables are perfectly correlated (positively or negatively) then the coefficients would not be unique.
 
 ## Multicollinearity, correlation, covariance
 
@@ -847,13 +831,10 @@ _Collinearity is a linear association between two predictors - when correlation 
 
 collinearity can be detected :
 
-*   Prominent changes in the estimated regression coefficients by adding or deleting a predictor
-
-*   correlation matrix
-
-*   VIF
-
-*   PCA, PCR
+* Prominent changes in the estimated regression coefficients by adding or deleting a predictor
+* correlation matrix
+* VIF
+* PCA, PCR
 
 **principal component regression** ( **PCR** ) is a [regression analysis](https://en.wikipedia.org/wiki/Regression_analysis) technique that is based on [principal component analysis](https://en.wikipedia.org/wiki/Principal_component_analysis) (PCA). More specifically, PCR is used for [estimating](https://en.wikipedia.org/wiki/Estimation) the unknown [regression coefficients](https://en.wikipedia.org/wiki/Linear_regression) in a [standard linear regression model](https://en.wikipedia.org/wiki/Linear_regression).
 
@@ -861,11 +842,9 @@ In PCR, instead of regressing the dependent variable on the explanatory variable
 
 You have several variables that are positively correlated with your response, and you think combining all of the variables could give you a good prediction of your response. However, you see that in the multiple linear regression, one of the weights on the predictors is negative. What could be the issue?
 
-*   Multicollinearity refers to a situation in which two or more explanatory variables in a [multiple regression](https://en.wikipedia.org/wiki/Multiple_regression) model are highly linearly related.
-
-*   Leave the model as is, despite multicollinearity. The presence of multicollinearity doesn't affect the efficiency of extrapolating the fitted model to new data provided that the predictor variables follow the same pattern of multicollinearity in the new data as in the data on which the regression model is based.
-
-*   principal component regression
+* Multicollinearity refers to a situation in which two or more explanatory variables in a [multiple regression](https://en.wikipedia.org/wiki/Multiple_regression) model are highly linearly related.
+* Leave the model as is, despite multicollinearity. The presence of multicollinearity doesn't affect the efficiency of extrapolating the fitted model to new data provided that the predictor variables follow the same pattern of multicollinearity in the new data as in the data on which the regression model is based.
+* principal component regression
 
 # Databases, pandas, DataFrame
 
@@ -922,6 +901,97 @@ pd.qcut() - divide in quantiles, for categorical vars
 df.nlargest - n largest elements in column
 
 !assign(over\_three\_hours=lambda dataframe: np.where(dataframe\["duration"\] > 180, "Yes", "No")) # Create new column called over\_three\_hours depending on duration > 180
+
+```python
+# Group by a date column, use a monthly frequency 
+# and find the total revenue for `category`
+
+grouped = df.groupby(['category', pd.Grouper(key='date', freq='M')])
+monthly_revenue = grouped['revenue'].sum()
+```
+
+Another function is `stack/unstack`, which can collapse/explode DataFrame indices. `crosstab` computes a cross-tabulation of two or more factors, and by default, computes a frequency table of the factors but can also compute other summary statistics.
+
+
+## when not use pandas
+
+1/ For real-time data processing (apache kafka)
+
+2/ When it comes to massive datasets (import datatable as dt dt.fread('large_file.csv').to_pandas())
+
+3/ High-performance computing (multiprocessing, multithreading) (polar)
+
+4/ For production-level data pipelines, think of them as a water supply system. Just as it needs to be reliable, scalable, and maintainable to ensure a constant supply of clean water, data pipelines need similar qualities. While Pandas may take care of cleaning and transformation, other libraries should be used for the rest.
+
+## pandas expert level
+
+### speed
+
+1)familiar with the differences between iteration functions like `apply`, `applymap`, `map`, `iterrows`, and `itertupl`
+
+2)you carefully use `iloc` and `loc` because you know that `iloc` is faster for indexing rows, and `loc` is faster for columns.
+
+3)! that conditional indexing is orders of magnitude faster with the query function
+
+```python
+
+# DataFrame of stock prices
+stocks_df = pd.DataFrame(
+    columns=['date', 'company', 'price', 'volume']
+)
+
+threshold = 1e5
+
+# Rows where the average volume for a company 
+# is greater than some threshold
+result = df.query(
+    '(volume.groupby(company).transform("mean") > @threshold)'
+)
+)
+```
+
+4)that the `replace` function is best friends with `query` to replace values.
+
+```python
+df.query('category == "electronics"').replace(
+    {"category": {"electronics": "electronics_new"}}, inplace=True
+)
+```
+
+5)different file formats such as CSVs, Parquets, Feathers, and HDFs
+
+6)vectorization, .values - faster for numpy arrays
+
+7)!!! cython, numba https://pandas.pydata.org/pandas-docs/stable/user_guide/enhancingperf.html
+
+
+### data types
+
+! avoid object as plague
+
+! define specific types of data - np.int32, np.int8
+
+Before reading data files, you observe their top few rows with `cat file_name.extension` to decide which data types you want to use for the columns. Then, when using `read_`* functions, you fill out the `dtype` parameter for each column instead of letting Pandas decide for itself.
+
+You also perform data manipulation *inplace* as much as possible. Without it, you know that Pandas spawns off copies of the DataFrames and Series, littering your memory. Additionally, you have a very good grip of classes and parameters like `pd.Categorical` and `chunksize`.
+
+```python
+import pandas as pd
+
+pd.read_csv(file_name, engine='pyarrow', dtype_engine='pyarrow')
+```
+
+visualization
+
+df.sample(20, axis=1).describe().T.style.bar(
+subset=["mean"], color="#205ff2"
+).background_gradient(
+subset=["std"], cmap="Reds"
+).background_gradient(
+subset=["50%"], cmap="coolwarm"
+)
+
+
 
 # Useful libraries (python, DS)
 
