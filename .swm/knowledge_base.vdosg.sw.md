@@ -754,7 +754,9 @@ An estimator is said to be **unbiased** if its bias is equal to zero for all val
 Unbiasedness means that the expectation of the estimator is equal to the population value we are estimating. This is desirable in inference because the goal is to explain the dataset as accurately as possible. However, this is not always desirable for data analysis or predictive modeling as there is the bias variance tradeoff. We sometimes want to prioritize the generalizability and avoid overfitting by reducing variance and thus increasing bias.
 
 # ML
+
 ## transformers
+
 https://uproger.com/sozdajte-transformera-s-nulya-s-pomoshhyu-pytorch/
 
 ## How to make normal distribution:
@@ -914,7 +916,6 @@ monthly_revenue = grouped['revenue'].sum()
 
 Another function is `stack/unstack`, which can collapse/explode DataFrame indices. `crosstab` computes a cross-tabulation of two or more factors, and by default, computes a frequency table of the factors but can also compute other summary statistics.
 
-
 ## when not use pandas
 
 1/ For real-time data processing (apache kafka)
@@ -966,7 +967,6 @@ df.query('category == "electronics"').replace(
 
 7)!!! cython, numba https://pandas.pydata.org/pandas-docs/stable/user_guide/enhancingperf.html
 
-
 ### data types
 
 ! avoid object as plague
@@ -993,8 +993,6 @@ subset=["std"], cmap="Reds"
 subset=["50%"], cmap="coolwarm"
 )
 
-
-
 # Useful libraries (python, DS)
 
 anonympy - anonimization of tabular, visual and pdf data
@@ -1010,12 +1008,15 @@ fake.name()
 snoop - debug
 nbdime: Полезная библиотека для контроля версий для Jupyter Notebook
 
-# visualization
+# Visualization
+
 visualize map in dash, dynamic
 
 https://telegra.ph/Sozdanie-geograficheskoj-karty-s-interaktivnymi-markerami-rukovodstvo-po-Plotly-Dash-05-26
 
 # SQL
+
+test
 
 ## Data modelling
 
