@@ -6,6 +6,8 @@ app_version: 1.8.1
 ---
 # Python
 
+test
+
 ## 1\. Data structures
 
 ### type annotation, type conversion (implicit and explicit)
