@@ -185,7 +185,7 @@ USAGE and REPRODUCTION of repo for others (im\_sales)
 
 !All data and cache are added to .gitignore and are saved only **locally**. To use repo (im\_sales) and get access to data create remote folder (\_WORK) to wich others collaborators **have access (keys or tokens or local shared net)**.
 
-When git clone repo, then dvc pull to get data from shared folder \_WORK. (all info for pull is in data.dvc file)
+When git clone repo, then dvc pull to get data from my shared folder \_WORK. (all info for pull is in data.dvc file)
 
 ## 3.OOP
 
@@ -754,6 +754,8 @@ An estimator is said to be **unbiased** if its bias is equal to zero for all val
 Unbiasedness means that the expectation of the estimator is equal to the population value we are estimating. This is desirable in inference because the goal is to explain the dataset as accurately as possible. However, this is not always desirable for data analysis or predictive modeling as there is the bias variance tradeoff. We sometimes want to prioritize the generalizability and avoid overfitting by reducing variance and thus increasing bias.
 
 # ML
+## transformers
+https://uproger.com/sozdajte-transformera-s-nulya-s-pomoshhyu-pytorch/
 
 ## How to make normal distribution:
 
@@ -998,6 +1000,20 @@ subset=["50%"], cmap="coolwarm"
 anonympy - anonimization of tabular, visual and pdf data
 
 folium - visualization of interactive maps
+
+pip install Fake fake data
+from faker import Faker
+fake = Faker()
+fake.name()
+'Lucy Cechtelar'
+
+snoop - debug
+nbdime: Полезная библиотека для контроля версий для Jupyter Notebook
+
+# visualization
+visualize map in dash, dynamic
+
+https://telegra.ph/Sozdanie-geograficheskoj-karty-s-interaktivnymi-markerami-rukovodstvo-po-Plotly-Dash-05-26
 
 # SQL
 
