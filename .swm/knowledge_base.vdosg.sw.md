@@ -770,6 +770,30 @@ https://uproger.com/sozdajte-transformera-s-nulya-s-pomoshhyu-pytorch/
 
 ## Metrics
 
+## IDecision trees
+
+Boosting can not extrapolate, only works with trained data
+
+## VAE
+
+basic idea of VAE is easy to understand: the real sample is transformed
+into an ideal data distribution through the encoder network, and then
+this data distribution is passed to a decoder network to obtain the
+generated sample. If the generated samples and the real samples are
+close enough, an autoencoder model is trained.
+
+The theoretical basis of VAE is the [Gaussian mixture model (GMM)](https://roger010620.medium.com/%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-em%E6%BC%94%E7%AE%97%E6%B3%95-expectation-maximization-algorithm-%E4%B8%89-%E9%AB%98%E6%96%AF%E6%B7%B7%E5%92%8C%E6%A8%A1%E5%9E%8Bgaussian-mixture-model-gmm-84286c2d64c7).
+
+**Gaussian mixture models is a popular unsupervised
+learning algorithm. The GMM approach is similar to K-Means clustering
+algorithm, but is more robust and therefore useful due to sophistication**
+
+In GMMs, it is assumed that different sub-populations(***K*** in total) of ***X ***follow a [normal distribution](https://en.wikipedia.org/wiki/Normal_distribution), although we only have information about the probability distribution of the overall population  ***X(*** hence the name Gaussian Mixture Model). Our task is to able to find the parameters of the ***K*** *gaussian’s* in order to visualize the data ***X ***for [*exploratory data analysis*](https://en.wikipedia.org/wiki/Exploratory_data_analysis)or make predictions on new data
+
+## PCA
+
+PCA is to find a *W *through SVD (singular value decomposition) so that the matrices *x *and *x *hat be as consistent as possible.
+
 ## NLP
 
 ### nlp preprocessing
