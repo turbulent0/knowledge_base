@@ -1,44 +1,45 @@
-import pandas as pd
-import numpy as np
-import numba
-df = pd.DataFrame(
-    {
-        "a": np.random.randn(1000000),
-        "b": np.random.randn(1000000),
-        "N": np.random.randint(100, 1000, (1000000)),
-        "x": "x",
-    }
-)
+import heapq
 
 
-@numba.jit(nopython=True)
-def f_plain(x):
-    return x * (x - 1)
+def dijkstra(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+
+    queue = [(0, start)]
+
+    while queue:
+        current_distance, current_node = heapq.heappop(queue)
+
+        if current_distance > distances[current_node]:
+            continue
+
+        for neighbor, weight in graph[current_node].items():
+            distance = current_distance + weight
+
+            if distance < distances[neighbor]:
+                distances[neighbor] = distance
+                heapq.heappush(queue, (distance, neighbor))
+
+    return distances
 
 
-@numba.jit(nopython=True)
-def integrate_f_numba(a, b, N):
-    s = 0
-    dx = (b - a) / N
-    for i in range(N):
-        s += f_plain(a + i * dx)
-    return s * dx
+# Example usage:
 
+# Create a graph
+graph = {
+    'A': {'B': 2, 'C': 3},
+    'B': {'D': 4, 'E': 5},
+    'C': {'F': 6},
+    'D': {'G': 7},
+    'E': {'G': 8, 'H': 9},
+    'F': {'H': 10},
+    'G': {},
+    'H': {}
+}
 
-@numba.jit(nopython=True)
-def apply_integrate_f_numba(col_a, col_b, col_N):
-    n = len(col_N)
-    result = np.empty(n, dtype="float64")
-    assert len(col_a) == len(col_b) == n
-    for i in range(n):
-        result[i] = integrate_f_numba(col_a[i], col_b[i], col_N[i])
-    return result
+start_node = 'A'
+distances = dijkstra(graph, start_node)
 
-
-def compute_numba(df):
-    result = apply_integrate_f_numba(
-        df["a"].to_numpy(), df["b"].to_numpy(), df["N"].to_numpy()
-    )
-    return pd.Series(result, index=df.index, name="result")
-
-print(compute_numba(df)[:10])
+print("Shortest distances from node", start_node + ":")
+for node, distance in distances.items():
+    print("Node:", node, "Distance:", distance)

@@ -4,9 +4,7 @@ title: knowledge_base
 file_version: 1.1.2
 app_version: 1.8.1
 ---
-# Python
-
-test
+> # Python
 
 ## 1\. Data structures
 
@@ -40,15 +38,21 @@ int('3'), str(), float()
 
 #### string interpolation
 
-name = 'Chris' print(f'Hello {name}') print('Hey %s %s' % (name, name)) print( "My name is {}".format((name)) )
+name = 'Chris'
+
+print(f'Hello {name}')
+
+print('Hey %s %s' % (name, name))
+
+print( "My name is {}".format((name)) )
 
 ### 1.2 Lists
 
 #### copy and deepcopy()
 
-copy - ref on object, all elements ref on copy
+copy - new object, all elements ref on copy
 
-deepcopy - new object, and every element ref on copy, but when change, new element object
+deepcopy - new object, and every element ref on copy, but when change, new element object, every element = new object
 
 #### list and array
 
@@ -170,7 +174,15 @@ Function of function and return function (logger, get time of execution)
 
 Типичный случай использования декораторов – это логирование.
 
-def logging(func): def log\_function\_called(): print(f'{func} called.') func() return log\_function\_called
+def logging(func):
+
+def log\_function\_called():
+
+print(f'{func} called.')
+
+func()
+
+return log\_function\_called
 
 ### DVC - data version controlThere 3 main entities:
 
@@ -330,8 +342,7 @@ package is catalog with modules, all packages are moduls, library is catalog wit
 
 \*args и \*\*kwargs – это конструкции, которые делают функции Python более гибкими, принимая изменчивое количество аргументов.
 
-* \*args передаёт изменчивое количеств
-* во аргументов без ключевых слов в список
+* \*args передаёт изменчивое количество аргументов без ключевых слов в список
 * \*\*kwargs передаёт изменчивое количество аргументов с ключевыми словами в словарь
 
 ## 5\. Exceptions
@@ -597,6 +608,51 @@ with open("./large\_dataset.txt") as input\_file: for line in input\_file: proce
 
 # Statistic and probability
 
+## Mutual information, entropy
+
+Mutual information shows how change in one variable is related to change in target (like r^2 for descrite variables, if var is continious you can make bins). It is related to entropy ( sum of prob and log of prob multiplication )
+![{\displaystyle \operatorname {I} (X;Y)=\sum {y\in {\mathcal {Y}}}\sum {x\in {\mathcal {X}}}{P{(X,Y)}(x,y)\log \left({\frac {P{(X,Y)}(x,y)}{P_{X}(x)<span data-type=](https://wikimedia.org/api/rest_v1/media/math/render/svg/1030462a874c1160206cf9347302067e20dbfb9a)\,P_{Y}(y)}}\right)},}" />
+
+Entropy - "uncertainty" inherent to the variable's possible outcomes, level of randomness
+
+Entropy - expected value of surprise   ($\dfrac{1}{p(x_i)}$)
+
+**$E =\sum_{i=0}^{n} p(x_i) \ln (\dfrac{1}{p(x_i)})$**
+
+## Central limit theorem
+
+Convergence by probability - to constant
+
+convergence by distribution - to anothery distribution
+
+Whatever the form of the population distribution, the sampling distribution tends to a Gaussian, and its dispersion is given by the central limit theorem
+
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/IllustrationCentralTheorem.png/400px-IllustrationCentralTheorem.png)
+
+![{\displaystyle \lim {n\to \infty }\mathbb {P} \left[{\sqrt {n}}({\bar {X}}{n}-\mu )\leq z\right]=\lim {n\to \infty }\mathbb {P} \left[{\frac {{\sqrt {n}}({\bar {X}}{n}-\mu )}{\sigma }}\leq {\frac {z}{\sigma }}\right]=\Phi \left({\frac {z}{\sigma }}\right),}](https://wikimedia.org/api/rest_v1/media/math/render/svg/defd4cf70972fa6a76a8570fee6551f4cb7d70b8)
+
+![{\displaystyle {\sqrt {n}}\left({\bar {X}}_{n}-\mu \right)\ \xrightarrow {d} \ {\mathcal {N}}\left(0,\sigma ^{2}\right).}](https://wikimedia.org/api/rest_v1/media/math/render/svg/6972400765bd7aad76f6d8778ae20c4447bce83e)
+
+## Moivre–Laplace theorem
+
+which is a special case of the [central limit theorem](https://en.wikipedia.org/wiki/Central_limit_theorem "Central limit theorem"), states that the [normal distribution](https://en.wikipedia.org/wiki/Normal_distribution "Normal distribution") may be used as an approximation to the [binomial distribution](https://en.wikipedia.org/wiki/Binomial_distribution "Binomial distribution") under certain conditions (n is large, p != 0)
+
+## Big Number theorem
+
+if the same experiment or study is repeated independently a large number of times, the average of the results of the trials must be close to the expected value. The result becomes closer to the expected value as the number of trials is increased
+
+![{\displaystyle \lim _{n\to \infty }\sum {i=1}^{n}{\frac {X{i}}{n}}={\overline {X}}}](https://wikimedia.org/api/rest_v1/media/math/render/svg/74549dd5495f028fd9a3dcdd6937da3b3f8a3f51)
+
+### Slutskiy theorem
+
+convergence of real numbers -> convergence of random variables
+
+Let ![X_{n},Y_{n}](https://wikimedia.org/api/rest_v1/media/math/render/svg/ddd30679ec5bcbfc0e4a89b5117d79cadabe34ff) be sequences of scalar/vector/matrix [random elements](https://en.wikipedia.org/wiki/Random_element "Random element"). If ![X_{n}](https://wikimedia.org/api/rest_v1/media/math/render/svg/72a8564cedc659cf2f95ae68bc5de2f5207a3285) converges in distribution to a random element ![X](https://wikimedia.org/api/rest_v1/media/math/render/svg/68baa052181f707c662844a465bfeeb135e82bab) and ![Y_{n}](https://wikimedia.org/api/rest_v1/media/math/render/svg/f19a1b3bf39298aacb7e2daeab9320130a986fb0) converges in probability to a constant ![c](https://wikimedia.org/api/rest_v1/media/math/render/svg/86a67b81c2de995bd608d5b2df50cd8cd7d92455), then
+
+* ![X_{n}+Y_{n}\ {\xrightarrow {d}}\ X+c;](https://wikimedia.org/api/rest_v1/media/math/render/svg/e60d3a40c6874dfe324d3736010623cc834c4b02)
+* ![{\displaystyle X_{n}Y_{n}\ \xrightarrow {d} \ Xc;}](https://wikimedia.org/api/rest_v1/media/math/render/svg/d8c2bbb0a0ad4351e0e216f36ff1fa02d9d8c73a)
+* ![X_{n}/Y_{n}\ {\xrightarrow {d}}\ X/c,](https://wikimedia.org/api/rest_v1/media/math/render/svg/57f8cd7312ca77ea02b26302a925dd6fa66bbb67) provided that *c* is invertible
+
 ### exp distribution vs poisson
 
 [https://www.youtube.com/watch?v=n7K8s4vryCQ&amp;ab\_channel=ExplainedbyMichael](https://www.youtube.com/watch?v=n7K8s4vryCQ&ab_channel=ExplainedbyMichael)
@@ -605,7 +661,7 @@ exp and pois distribution are from poisson process:
 
 1. memoryless, all events are independent
 2. average time between events is known and constant
-3. events cannot occure simultelesnly ( tine interval between events as Bernully trial (event happen or not))
+3. events cannot occure simultelesnly ( tiny interval between events as Bernully trial (event happen or not))
 
 Poisson dist can be used as approx of binomial distribution, if n is sufficiently large and p is sufficiently small
 
@@ -618,9 +674,10 @@ Exp: Poisson:
 events ( fixed events)
 
 2. Random var - time 2. number of enents - descrete
-3. lambda - rate of occurance(customers per hour, 3. lambda - expected number of occurences ( number of customers every period, unitless) measure - time ^(-1), frequency, time) 4. can approx bernully when large n, and small p
-4. special case of gamma (shape=1, scale = 1/lambda)
+3. lambda - rate of occurance(customers per hour), 3. lambda - expected number of occurences ( number of customers every period, unitless) measure - time ^(-1), frequency, time)
+4. special case of gamma (shape=1, scale = 1/lambda).
 5. continuous of geometric ( time until event occurs)
+6. can approx bernully when large n, and small p
 
 ### probability vs likelihood
 
@@ -697,13 +754,36 @@ The best way I know to quantify the impact of performance is to isolate just tha
 
 #### What is a p-value? What is the difference between type-1 and type-2 error?
 
-A p-value is defined such that under the null hypothesis less than the fraction p of events have parameter values more extreme than the observed parameter. It is not the probability that the null hypothesis is wrong. type-1 error: rejecting Ho when Ho is true type-2 error: not rejecting Ho when Ha is true
+A p-value is defined such that under the null hypothesis less than the fraction p of events have parameter values more extreme than the observed parameter. It is not the probability that the null hypothesis is wrong.
+
+**!!! p-value -  type 1 error, false positive**
+
+type-1 error: rejecting Ho when Ho is true   - **p-value**
+
+type-2 error: not rejecting Ho when Ha is true - **power**
+
+1-sided and 2-sided p-value - (1 or 2 tails of distribution)
+
+#### p-hacking
+
+1) when there are many samples with several elements - will be false positive (5%)
+2) when p-value is small, you can not generate another element. Every time the size of sample have to be the same
+   How to define size of sample - power analysis (power - the probability that NULL hypotesis will be rejected correctly) for sample size
+   a) size of sample
+   b) intersection of distributions - effect size = (difference in the means)/((s1^2 + s2^2)/2)^(1/2)
+   c) statistics power calculator
+3) To avoid p-hacking - FDR (False discovery rates)
+   when samples are from the same distribution - p-value are uniformaly distributed
+   in other case - p-value are expotentially distributed
+   ! correct p-values with benjamini-hochberg method - split false positives and true positives
 
 ## Bootstrapping
 
 is any test or metric that uses [random sampling with replacement](https://en.wikipedia.org/wiki/Sampling_(statistics)#Replacement_of_selected_units) (e.g. mimicking the sampling process), and falls under the broader class of [resampling](https://en.wikipedia.org/wiki/Resampling_(statistics)) "Resampling (statistics)") methods. Bootstrapping assigns measures of accuracy (bias, variance, [confidence intervals](https://en.wikipedia.org/wiki/Confidence_interval), prediction error, etc.) to sample estimates. ^[\[1\]](https://en.wikipedia.org/wiki/Bootstrapping_(statistics)#cite_note-:0-1)^ ^[\[2\]](https://en.wikipedia.org/wiki/Bootstrapping_(statistics)#cite_note-2)^ This technique allows estimation of the sampling distribution of almost any statistic using random sampling methods
 
 It may also be used for constructing [hypothesis tests](https://en.wikipedia.org/wiki/Statistical_hypothesis_testing). It is often used as an alternative to [statistical inference](https://en.wikipedia.org/wiki/Statistical_inference) based on the assumption of a parametric model when that assumption is in doubt, or where parametric inference is impossible or requires complicated formulas for the calculation of [standard errors](https://en.wikipedia.org/wiki/Standard_error).
+
+**Jacknife** - remove i-th element from sample, another resampling technic.
 
 ## Statistical inference
 
@@ -824,6 +904,14 @@ y = f(x) + error (normal distribution with 0 mean)
 
 * p > n.
 * If some of the explanatory variables are perfectly correlated (positively or negatively) then the coefficients would not be unique.
+
+## Logistic regression
+
+in linear regression - square root method and R^2
+
+in logistic regression - fit sigmoid (cdf of ligstic distribution) with maximum likelyhood and map values to probabilities
+
+logit function - inverse to logistic function, quantile function - map probabilites to values
 
 ## Multicollinearity, correlation, covariance
 
@@ -965,9 +1053,12 @@ df.query('category == "electronics"').replace(
 
 5)different file formats such as CSVs, Parquets, Feathers, and HDFs
 
-6)vectorization, .values - faster for numpy arrays
+6)!vectorization, .values - faster for numpy arrays
 
 7)!!! cython, numba https://pandas.pydata.org/pandas-docs/stable/user_guide/enhancingperf.html
+
+8) indexing with baseindexer
+9) merge_asof, not insert dropped dates
 
 ### data types
 
@@ -1040,6 +1131,116 @@ Data modeling: Create visual data models, including entity-relationship diagrams
 
 # System Design
 
-<br/>
+# Algorithms
 
-This file was generated by Swimm. [Click here to view it in the app](https://app.swimm.io/repos/Z2l0aHViJTNBJTNBa25vd2xlZGdlX2Jhc2UlM0ElM0F0dXJidWxlbnQw/docs/vdosg).
+## Greedy algorithm
+
+
+Greedy algorithms have several main properties:
+
+1. !Greedy-choice property: A greedy algorithm makes a series of locally optimal choices at each step, hoping that these choices will lead to a globally optimal solution. In other words, it selects the best available option at the current step without considering the future consequences.
+2. Optimal substructure: Greedy algorithms rely on problems that exhibit optimal substructure, meaning that an optimal solution to the overall problem can be constructed from optimal solutions to its subproblems. This allows the algorithm to build up the solution incrementally.
+3. !!! Greedy stays ahead (or safe move): The key idea behind a greedy algorithm is to make choices that do not decrease the overall solution's optimality. In other words, even if the choices might not lead to the best solution at every step, they should at least not make the final solution worse.
+4. !!! No backtracking: Greedy algorithms make choices in a forward manner and never revise them. Once a decision is made, it is not reconsidered even if better options become available later on. This "one-shot" approach makes them efficient and easy to implement.
+5. Greedy algorithms may not always find the globally optimal solution: Though greedy algorithms can be simple and efficient, they do not guarantee finding the best solution for all problems. In some cases, they can find a locally optimal solution that is not globally optimal.
+6. !!! Greedy algorithms often involve sorting: Many greedy algorithms involve sorting the elements based on certain criteria to make the greedy choices efficiently. Sorting allows the algorithm to prioritize the elements based on their "greediness."
+7. Not suitable for all problems: Greedy algorithms are appropriate for certain types of problems that exhibit the greedy-choice property and optimal substructure. However, they may not be suitable for problems with complex dependencies or those requiring an exhaustive search for the globally optimal solution.
+8. Greedy algorithms are intuitive: One of the advantages of greedy algorithms is their simplicity and intuitive nature. They often provide a good approximate solution for problems where finding an exact solution is computationally infeasible.
+
+Overall, greedy algorithms are useful when a greedy-choice approach leads to an optimal solution for the given problem. However, careful analysis and understanding of the problem's properties are necessary to ensure the correctness and optimality of the resulting solution.
+
+Example: coin change greedy
+
+```python
+
+def coin_change_greedy(amount, coins):
+    coins.sort(reverse=True)  # Sort coins in descending order
+    num_coins = 0
+
+    for coin in coins:
+        num_coins += amount // coin  # Add the maximum number of this coin possible
+        amount %= coin  # Reduce the amount by the value of the coins used
+
+    if amount != 0:
+        return -1  # It is not possible to make change with the given coins
+
+    return num_coins
+
+
+# Example usage:
+
+amount = 37
+coins = [25, 10, 5, 1]
+min_coins = coin_change_greedy(amount, coins)
+
+if min_coins != -1:
+    print(f"Minimum number of coins needed to make change for {amount} cents: {min_coins}")
+else:
+    print("Cannot make change with the given coins.")
+
+
+```
+
+
+
+## Dynamic programming
+
+A naive recursive approach to calculate the n-th Fibonacci number would involve redundant calculations of smaller Fibonacci numbers. For example, to compute F(5), we would need to compute F(4) and F(3), and to compute F(4), we would again compute F(3), resulting in duplicate computations.
+
+Using dynamic programming, we can avoid redundant calculations
+
+* breaking down a problem into simpler subproblems
+* solving each subproblem only once
+* storing the results for future use.
+
+```python
+
+
+
+def fibonacci(n):
+    if n <= 1:
+        return n
+  
+    # Initialize the DP array to store computed Fibonacci numbers
+    dp = [0] * (n+1)
+    dp[0] = 0
+    dp[1] = 1
+  
+    for i in range(2, n+1):
+        # Compute the i-th Fibonacci number by summing the previous two
+        dp[i] = dp[i-1] + dp[i-2]
+  
+    # Return the n-th Fibonacci number
+    return dp[n]
+
+```
+
+## Djikstra algoritm (shortest distance in graph) - !uses heap
+
+```python
+import heapq
+
+def dijkstra(graph, start):
+    heap = [(0, start)]
+    visited = set()
+    while heap:
+        (cost, v) = heapq.heappop(heap)
+        if v not in visited:
+            visited.add(v)
+            for u, c in graph[v].items():
+                if u not in visited:
+                    heapq.heappush(heap, (cost + c, u))
+    return visited
+
+graph = {
+    'A': {'B': 2, 'C': 3},
+    'B': {'D': 4, 'E': 5},
+    'C': {'F': 6},
+    'D': {'G': 7},
+    'E': {'G': 8, 'H': 9},
+    'F': {'H': 10},
+    'G': {},
+    'H': {}
+}
+print(dijkstra(graph, 'A'))
+```
