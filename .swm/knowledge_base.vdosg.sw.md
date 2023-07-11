@@ -850,6 +850,41 @@ https://uproger.com/sozdajte-transformera-s-nulya-s-pomoshhyu-pytorch/
 
 ## Metrics
 
+### Auc roc
+
+TPR and FPR on axis
+
+> ROC is a **probability** curve and AUC represents the degree or measure of **separability.** It tells how much the model is capable of distinguishing between classes
+
+
+![Alt text](../images/1_Uu-t4pOotRQFoyrfqEvIEg.webp)
+
+![Alt text](../images/1_HmVIhSKznoW8tFsCLeQjRw.webp)
+
+## Decision trees
+
+Boosting can not extrapolate, only works with trained data
+
+## VAE
+
+basic idea of VAE is easy to understand: the real sample is transformed
+into an ideal data distribution through the encoder network, and then
+this data distribution is passed to a decoder network to obtain the
+generated sample. If the generated samples and the real samples are
+close enough, an autoencoder model is trained.
+
+The theoretical basis of VAE is the [Gaussian mixture model (GMM)](https://roger010620.medium.com/%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-em%E6%BC%94%E7%AE%97%E6%B3%95-expectation-maximization-algorithm-%E4%B8%89-%E9%AB%98%E6%96%AF%E6%B7%B7%E5%92%8C%E6%A8%A1%E5%9E%8Bgaussian-mixture-model-gmm-84286c2d64c7).
+
+**Gaussian mixture models is a popular unsupervised
+learning algorithm. The GMM approach is similar to K-Means clustering
+algorithm, but is more robust and therefore useful due to sophistication**
+
+In GMMs, it is assumed that different sub-populations(***K*** in total) of ***X ***follow a [normal distribution](https://en.wikipedia.org/wiki/Normal_distribution), although we only have information about the probability distribution of the overall population  ***X(*** hence the name Gaussian Mixture Model). Our task is to able to find the parameters of the ***K*** *gaussian’s* in order to visualize the data ***X ***for [*exploratory data analysis*](https://en.wikipedia.org/wiki/Exploratory_data_analysis)or make predictions on new data
+
+## PCA
+
+PCA is to find a *W *through SVD (singular value decomposition) so that the matrices *x *and *x *hat be as consistent as possible.
+
 ## NLP
 
 ### nlp preprocessing
@@ -941,6 +976,20 @@ You have several variables that are positively correlated with your response, an
 * principal component regression
 
 # Databases, pandas, DataFrame
+
+## ACID
+
+ACID is an acronym that refers to the set of 4 key properties that define a transaction: **Atomicity, Consistency, Isolation,** and **Durability.** If a database operation has these ACID properties, it can be called an ACID transaction, and data storage systems that apply these operations are called transactional systems. ACID transactions guarantee that each read, write, or modification of a table has the following properties:
+
+* **Atomicity** - each statement in a transaction (to read, write, update or delete data) is treated as a single unit. Either the entire statement is executed, or none of it is executed. This property prevents data loss and corruption from occurring if, for example, if your streaming data source fails mid-stream.
+* **Consistency** - ensures that transactions only make changes to tables in predefined, predictable ways. Transactional consistency ensures that corruption or errors in your data do not create unintended consequences for the integrity of your table.
+* **Isolation** - when multiple users are reading and writing from the same table all at once, isolation of their transactions ensures that the concurrent transactions don't interfere with or affect one another. Each request can occur as though they were occurring one by one, even though they're actually occurring simultaneously.
+* **Durability** - ensures that changes to your data made by successfully executed transactions will be saved, even in the event of system failure.
+
+The ACID properties (Atomicity, Consistency, Isolation, and Durability) are traditionally associated with !!!**relational** databases, specifically those that use a SQL interface. However, it is possible to implement these properties in other types of databases, such as NoSQL databases, as well.In general, the ACID properties are a set of characteristics that ensure that a database can maintain its integrity and consistency even in the face of concurrent access, errors, or failures.
+
+!!! MongoDB is ACID complient, Redis is not
+
 
 ## Datasets
 
@@ -1135,7 +1184,6 @@ Data modeling: Create visual data models, including entity-relationship diagrams
 
 ## Greedy algorithm
 
-
 Greedy algorithms have several main properties:
 
 1. !Greedy-choice property: A greedy algorithm makes a series of locally optimal choices at each step, hoping that these choices will lead to a globally optimal solution. In other words, it selects the best available option at the current step without considering the future consequences.
@@ -1180,8 +1228,6 @@ else:
 
 
 ```
-
-
 
 ## Dynamic programming
 
