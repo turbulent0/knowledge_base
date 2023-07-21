@@ -57,7 +57,9 @@ deepcopy - new object, and every element ref on copy, but when change, new eleme
 #### list and array
 
 * array same data type
-* array +, - linear operations, different methods append
+* it is written in c (continiuous?), is fast
+* array +, - vector operations
+* different methods append
 * arrays less memory
 
 ## 1.5 Queue types in python
@@ -83,6 +85,228 @@ In fact, the `PriorityQueue` _implementation_ uses `heapq` under the hood to do 
 Identity (is) and equality (==), can check by id(var), same or note memory cell
 
 ## 2.Design patterns
+
+### Patterns
+
+- <font size="5" >  
+  <b>Singleton </b> </font> -
+
+ is a creational design pattern that ensures a class has only one instance and provides a global point of access to it. It restricts the instantiation of a class to a single object, allowing that object to be shared across the application.
+
+Key characteristics of a singleton include:
+
+1. Single Instance: A singleton class should have only one instance throughout the lifetime of the program.
+2. Global Access: The singleton instance should be globally accessible so that other parts of the program can use it easily.
+
+Singletons are often used in scenarios where having multiple instances of a class could cause issues or when there is a need to centralize control over a specific resource or functionality. Some common use cases for singletons include managing **database connections, file systems, logging services, configuration settings, or thread pools**.
+
+```python
+class Singleton:
+    _instance = None
+
+    @staticmethod
+    def get_instance():
+        if not Singleton._instance:
+            Singleton._instance = Singleton()
+        return Singleton._instance
+
+```
+
+- <font size="5" >  
+  <b>Decorator </b> </font> - 
+  in python это функция, которая получает функцию в качестве входных данных и возвращает её в качестве выходных данных, но расширяя её функционал без изменения основной модели.
+
+In software design patterns, a decorator is a structural design pattern that allows behavior to be added to an individual object dynamically, without affecting the behavior of other objects of the same class. It provides a way to extend or modify the functionality of an object at runtime by wrapping it with one or more decorator objects.
+
+The decorator pattern follows the open-closed principle, which states that classes should be open for extension but closed for modification. Instead of directly modifying the original object or class, the decorator pattern allows additional functionality to be added by creating a decorator class that wraps the original object.
+
+Key characteristics of the decorator pattern include:
+
+1. Interface Inheritance: Both the original object and decorator implement the same interface, allowing the decorator to be used in place of the original object.
+2. Composition: The decorator contains a reference to the wrapped object and can modify its behavior by delegating to the wrapped object and adding its own functionality.
+3. Recursive Composition: Decorators can be stacked or combined together, allowing multiple layers of behavior to be added to an object.
+
+The decorator pattern provides a flexible and modular way to add or alter the behavior of objects without **changing their underlying structure.**
+
+- <font size="5">  
+  <b>Factory method </b></font>
+
+The Factory Method pattern is a creational design pattern that provides an interface for creating objects, but allows subclasses to decide which class to instantiate. It promotes loose coupling by abstracting the object creation process.
+
+In the Factory Method pattern, there is a base class or interface that declares the factory method, which is responsible for creating objects. Subclasses of this base class can override the factory method to create different variations or types of objects, while still adhering to the same interface.
+
+```python
+from abc import ABC, abstractmethod
+
+class Product(ABC):
+    @abstractmethod
+    def operation(self):
+        pass
+
+class ConcreteProductA(Product):
+    def operation(self):
+        return "ConcreteProductA operation"
+
+class ConcreteProductB(Product):
+    def operation(self):
+        return "ConcreteProductB operation"
+
+class Creator(ABC):
+    @abstractmethod
+    def factory_method(self):
+        pass
+
+    def operation(self):
+        product = self.factory_method()
+        return product.operation()
+
+class ConcreteCreatorA(Creator):
+    def factory_method(self):
+        return ConcreteProductA()
+
+class ConcreteCreatorB(Creator):
+    def factory_method(self):
+        return ConcreteProductB()
+
+# Usage
+creator_a = ConcreteCreatorA()
+product_a = creator_a.operation()
+print(product_a)  # Output: ConcreteProductA operation
+
+creator_b = ConcreteCreatorB()
+product_b = creator_b.operation()
+print(product_b)  # Output: ConcreteProductB operation
+
+
+```
+
+we have a base `Product` class with two concrete implementations: `ConcreteProductA` and `ConcreteProductB`. We also have a base `Creator` class with two concrete implementations: `ConcreteCreatorA` and `ConcreteCreatorB`. Each concrete creator subclass overrides the `factory_method` to create a specific type of product. The `Creator` class's `operation` method uses the `factory_method` to create the product and performs some operation on it.
+
+The Factory Method pattern allows the client code to work with the abstract `Creator` class, without knowing the specific product being created. The actual product creation is delegated to the concrete creator subclasses.
+
+Note that the Factory Method pattern is just one of many design patterns and is useful when there is a need for flexible object creation or decoupling the client code from the specific object types.
+
+- <font size="5">  
+  <b>Delegation </b></font>
+
+In software design patterns, delegation is a structural design pattern that allows an object to delegate a specific task or responsibility to another object. The delegation pattern promotes code reuse and modular design by enabling objects to collaborate and share functionality without direct coupling or inheritance.
+
+In delegation, an object delegates a specific task to another object, known as the delegate or delegate object. The delegate object is responsible for performing the delegated task, while the delegating object retains control and can coordinate the overall behavior.
+
+Key characteristics of the delegation pattern include:
+
+Collaboration: The delegating object collaborates with the delegate object to achieve a specific functionality or task.
+
+Separation of Concerns: Delegation separates the concerns of the delegating object and the delegate object, allowing them to focus on their respective responsibilities.
+
+Dynamic Behavior: Delegation allows the delegate object to be changed or swapped at runtime, providing flexibility in behavior.
+
+Delegation is often used when a class or object needs to use functionality that is already implemented in another class or object, without inheriting from it. It helps achieve code reuse, modularity, and loose coupling between objects.
+
+A common example of delegation is the use of composition over inheritance. Instead of inheriting behavior from a superclass, an object can delegate specific tasks to another object that specializes in that behavior.
+
+```python
+
+class Delegate:
+    def do_task(self):
+        print("Delegate: Performing task")
+
+class Delegator:
+    def __init__(self):
+        self.delegate = Delegate()
+
+    def do_task(self):
+        print("Delegator: Delegating task to delegate")
+        self.delegate.do_task()
+
+# Usage
+delegator = Delegator()
+delegator.do_task()
+
+
+```
+
+- <font size="5">  
+  <b>dependency injection </b></font>
+
+The Dependency Injection pattern is a design pattern used in object-oriented programming that focuses on managing dependencies between objects. It helps to decouple classes and promotes loose coupling by shifting the responsibility of creating and providing dependent objects to external entities.
+
+In the Dependency Injection pattern, rather than having a class directly create or look up its dependencies, the dependencies are injected into the class from outside. This allows for more flexibility, testability, and easier maintenance of the code.
+
+There are three common forms of Dependency Injection:
+
+Constructor Injection: Dependencies are provided to a class through its constructor. The dependencies are passed as parameters during the instantiation of the class.
+
+Setter Injection: Dependencies are provided to a class through setter methods. The class exposes setter methods that can be used to set the dependencies after the object has been created.
+
+Interface Injection: The class implements an interface that defines methods for injecting dependencies. The dependencies are injected through these interface methods.
+
+The Dependency Injection pattern helps to achieve inversion of control, where the responsibility for managing dependencies is delegated to an external entity or framework. This allows for more modular and flexible code, as objects are not tightly coupled to their dependencies, and different implementations can be easily swapped.
+
+```python
+class ServiceA:
+    def do_something(self):
+        print("Service A is doing something.")
+
+class ServiceB:
+    def __init__(self, service_a):
+        self.service_a = service_a
+
+    def do_something_else(self):
+        print("Service B is doing something else.")
+        self.service_a.do_something()
+
+# Usage
+service_a = ServiceA()
+service_b = ServiceB(service_a)
+service_b.do_something_else()
+
+
+```
+
+- <font size="5">  
+  <b>inversion of control </b></font>
+
+The Inversion of Control (IoC) pattern, also known as the Hollywood Principle ("Don't call us, we'll call you"), is a design principle that governs the flow of control and dependency management in software systems. It is not a specific design pattern, but rather a general concept that influences the design and structure of an application.
+
+In traditional programming, the flow of control is typically determined by the application code. For example, a class instantiates and controls the lifecycle of its dependencies, and methods within the class call other methods as needed.
+
+In contrast, the Inversion of Control pattern flips the traditional flow of control. Instead of the application code directly controlling the dependencies, control is inverted or shifted to an external entity or framework. This external entity takes responsibility for managing the dependencies and orchestrating the application's execution.
+
+Inversion of Control is often achieved through the use of a dependency injection framework or container. The framework takes care of creating and managing the instances of objects, as well as injecting dependencies into the appropriate objects. The application code then focuses on defining the desired behavior and relies on the framework to handle the instantiation and wiring of dependencies.
+
+### Patterns structure in OOP
+
+Creational Patterns:
+
+Factory Method: Creates objects without specifying the exact class of the object to be created.
+Abstract Factory: Provides an interface for creating families of related or dependent objects without specifying their concrete classes.
+Singleton: Ensures a class has only one instance and provides a global point of access to it.
+Builder: Separates the construction of complex objects from their representation, allowing the same construction process to create different representations.
+Structural Patterns:
+
+Adapter: Converts the interface of a class into another interface clients expect, enabling classes to work together that otherwise couldn't.
+Decorator: Dynamically adds responsibilities to objects by wrapping them with one or more decorator objects.
+Composite: Composes objects into a tree structure to represent part-whole hierarchies. Clients can treat individual objects and compositions uniformly.
+Proxy: Provides a surrogate or placeholder for another object to control access to it.
+Behavioral Patterns:
+
+Observer: Defines a one-to-many dependency between objects, so that when one object changes state, all its dependents are notified and updated automatically.
+Strategy: Defines a family of interchangeable algorithms and encapsulates each one, allowing them to be used interchangeably based on the context.
+Template Method: Defines the skeleton of an algorithm in a base class, allowing subclasses to redefine certain steps of the algorithm without changing its structure.
+Command: Encapsulates a request as an object, allowing parameterization of clients with different requests, queuing, or logging of requests, and support for undoable operations.
+
+### lambda function
+
+profiler (cprofiler) don't see lambda functions and can not check it performance
+
+### with context manager
+
+has two magic methods (underscore method in class)
+
+--enter()
+
+--close()
 
 ### Data classes
 
@@ -203,6 +427,18 @@ When git clone repo, then dvc pull to get data from my shared folder \_WORK. (al
 
 ## 3.OOP
 
+### init, new
+
+`__new__` is a static method that is responsible for creating a new instance of a class. It is called before `__init__` and is used to create and return the new object.
+
+`__init__` is an instance method that is called after the new and is used when we call created class
+
+### magic methods
+
+double undescore(dunder)  **predefined** methods give special functionality to classes
+
+--str--, --repr--, --len--, --init--, --new--, --next--, --iter--, --getitem--
+
 ### introspection in python
 
 Интроспекция — это способность программы исследовать тип или свойства объекта во время работы программы
@@ -290,7 +526,7 @@ class Employee:
 
 ### exemple (self, ), class(cls, ) and static () methods
 
-**Методы экземпляра** : принимают параметр self и относятся к определенному экземпляру класса. selfin call
+**Методы экземпляра** : принимают параметр self и относятся к определенному экземпляру класса. self in call
 
 **Статические методы** : используют декоратор @staticmethod, не связаны с конкретным экземпляром и являются автономными (атрибуты класса или экземпляра не изменяются). - dont change class or example
 
@@ -325,6 +561,19 @@ To clarify, the `function` type is both a class and the type of functions in Pyt
 object-relational mapping - To connect database with model data
 
 SQLAlchemy in Flask, ORM in Django
+
+### Coupling
+
+In object-oriented programming (OOP), coupling refers to the degree of interdependence or connectivity between classes or components within a system. It indicates how closely two or more classes are connected or reliant on each other.
+
+Coupling is an important concept in OOP as it affects the maintainability, flexibility, and reusability of code. There are different levels of coupling, ranging from loose coupling to tight coupling:
+
+1. Loose Coupling: Loose coupling implies that classes or components have minimal knowledge or dependency on each other. They interact through well-defined interfaces or abstractions, allowing them to be modified, extended, or replaced independently without affecting other components. Loose coupling promotes modularity, flexibility, and code reusability.
+2. Tight Coupling: Tight coupling occurs when classes or components have strong dependencies and rely heavily on each other's implementation details. Changes made to one class may require modifications in other classes, resulting in a high degree of interdependence. Tight coupling can make code more difficult to maintain, test, and reuse.
+
+Reducing coupling and promoting loose coupling is generally considered a good practice in software development. It helps achieve modular, decoupled, and maintainable code. This is often done through techniques such as encapsulation, abstraction, dependency injection, and the use of design patterns like Dependency Injection and Inversion of Control (IoC).
+
+By reducing coupling and promoting loose coupling, you can create more flexible and maintainable software that is easier to modify, extend, and adapt to changing requirements.
 
 ## 4.Modules
 
@@ -611,13 +860,23 @@ with open("./large\_dataset.txt") as input\_file: for line in input\_file: proce
 ## Mutual information, entropy
 
 Mutual information shows how change in one variable is related to change in target (like r^2 for descrite variables, if var is continious you can make bins). It is related to entropy ( sum of prob and log of prob multiplication )
-![{\displaystyle \operatorname {I} (X;Y)=\sum {y\in {\mathcal {Y}}}\sum {x\in {\mathcal {X}}}{P{(X,Y)}(x,y)\log \left({\frac {P{(X,Y)}(x,y)}{P_{X}(x)<span data-type=](https://wikimedia.org/api/rest_v1/media/math/render/svg/1030462a874c1160206cf9347302067e20dbfb9a)\,P_{Y}(y)}}\right)},}" />
+![{\displaystyle \operatorname {I} (X;Y)=\sum {y\in {\mathcal {Y}}}\sum {x\in {\mathcal {X}}}{P{(X,Y)}(x,y)\log \left({\frac {P{(X,Y)}(x,y)}{P_{X}(x)<span data-type=](https://wikimedia.org/api/rest_v1/media/math/render/svg/1030462a874c1160206cf9347302067e20dbfb9a)\,
+
+where ![{\displaystyle P_{(X,Y)}}](https://wikimedia.org/api/rest_v1/media/math/render/svg/c2869dd2b7407ec3d99e02c7fee23029dd5c01f8)is the [joint probability *mass* function](https://en.wikipedia.org/wiki/Joint_distribution "Joint distribution") of ![X](https://wikimedia.org/api/rest_v1/media/math/render/svg/ddc598ecae1fcba5722afceaaeb88ba6a5ff6e35)and ![Y](https://wikimedia.org/api/rest_v1/media/math/render/svg/e171bb64f2698d7d40cd48cc028f18da8027f4b9),  and ![P_X](https://wikimedia.org/api/rest_v1/media/math/render/svg/a81e9b8953f6892199a2a57a5bc07a8144778a0f)and ![{\displaystyle P_{Y}}](https://wikimedia.org/api/rest_v1/media/math/render/svg/e52a028cc165bfc94caedb9464a32c36bf49130a)are the [marginal probability](https://en.wikipedia.org/wiki/Marginal_probability "Marginal probability") mass functions of ![X](https://wikimedia.org/api/rest_v1/media/math/render/svg/ddc598ecae1fcba5722afceaaeb88ba6a5ff6e35)and ![Y](https://wikimedia.org/api/rest_v1/media/math/render/svg/e171bb64f2698d7d40cd48cc028f18da8027f4b9)respectively
 
 Entropy - "uncertainty" inherent to the variable's possible outcomes, level of randomness
+
+!!! In ML - it is log loss (cross entropy loss function)
 
 Entropy - expected value of surprise   ($\dfrac{1}{p(x_i)}$)
 
 **$E =\sum_{i=0}^{n} p(x_i) \ln (\dfrac{1}{p(x_i)})$**
+
+## Principle of maximum entropy
+
+The principle of maximum entropy states that the probability distribution which best represents the current state of knowledge is the one with largest entropy, in the context of precisely stated prior data (such as a proposition that expresses testable information). These prior data serves as the constrains to the probability distribution.
+
+Given the second law of thermodynamics (principle of increase of entropy), isolated systems spontaneously evolve towards thermodynamic equilibrium, the state with maximum entropy, maximum entropy distributions become the most natural distributions under certain constrains
 
 ## Central limit theorem
 
@@ -643,7 +902,7 @@ if the same experiment or study is repeated independently a large number of time
 
 ![{\displaystyle \lim _{n\to \infty }\sum {i=1}^{n}{\frac {X{i}}{n}}={\overline {X}}}](https://wikimedia.org/api/rest_v1/media/math/render/svg/74549dd5495f028fd9a3dcdd6937da3b3f8a3f51)
 
-### Slutskiy theorem
+## Slutskiy theorem
 
 convergence of real numbers -> convergence of random variables
 
@@ -652,6 +911,19 @@ Let ![X_{n},Y_{n}](https://wikimedia.org/api/rest_v1/media/math/render/svg/ddd30
 * ![X_{n}+Y_{n}\ {\xrightarrow {d}}\ X+c;](https://wikimedia.org/api/rest_v1/media/math/render/svg/e60d3a40c6874dfe324d3736010623cc834c4b02)
 * ![{\displaystyle X_{n}Y_{n}\ \xrightarrow {d} \ Xc;}](https://wikimedia.org/api/rest_v1/media/math/render/svg/d8c2bbb0a0ad4351e0e216f36ff1fa02d9d8c73a)
 * ![X_{n}/Y_{n}\ {\xrightarrow {d}}\ X/c,](https://wikimedia.org/api/rest_v1/media/math/render/svg/57f8cd7312ca77ea02b26302a925dd6fa66bbb67) provided that *c* is invertible
+
+## Statistic tests
+
+### Q-Q graph (quantile-quantile)
+
+ to compare to distributions by quantiles
+on x and y axis are quantiles of two distributions, when distributions are similar line of points is x=y
+
+## Distributions
+
+### lognorm distribution
+
+distribution of phone call durations, because bell is skewed to short calls (also can be gamma distribution or Weilbull)
 
 ### exp distribution vs poisson
 
@@ -679,7 +951,7 @@ events ( fixed events)
 5. continuous of geometric ( time until event occurs)
 6. can approx bernully when large n, and small p
 
-### probability vs likelihood
+## probability vs likelihood
 
 ˚probability = given distribution find probability of events
 
@@ -691,7 +963,7 @@ L(distr|x1, x2, x3, x4)
 
 \*\*probability is the quantity most people are familiar with which deals with predicting new data given a known model ("what is the probability of getting heads six times in a row flipping this \*\*[50:50](https://www.youtube.com/watch?v=pYxNSUDSFH4&t=3050s) coin?") while likelihood deals with fitting models given some known data ("what is the likelihood that this coin is/isn't rigged given that I just flipped heads six times in a row?"). I wanted to add this perspective because using the example in this clip, a likelihood quantity such as 0.12 is not meaningful to the layman unless it is explained exactly what 0.12 means: a measure of the sample's support for the assumed model i.e. low values either mean rare data or incorrect model!
 
-### Map, MLE and MOP
+## Map, MLE and MOP
 
 [https://en.wikipedia.org/wiki/Maximum\\\_a\\\_posteriori\\\_estimation](https://en.wikipedia.org/wiki/Maximum\_a\_posteriori\_estimation) (about:blank)
 
@@ -719,13 +991,13 @@ MLE - maximum likelihood
 
 MOP = method of momentums
 
-### What is maximum likelihood estimation? Could there be any case where it doesn’t exist?
+## What is maximum likelihood estimation? Could there be any case where it doesn’t exist?
 
 A method for parameter optimization (fitting a model). We choose parameters so as to maximize the likelihood function (how likely the outcome would happen given the current data and our model). maximum likelihood estimation (MLE) is a method of estimating the parameters of a statistical model given observations, by finding the parameter values that maximize the likelihood of making the observations given the parameters. MLE can be seen as a special case of the maximum a posteriori estimation (MAP) that assumes a uniform prior distribution of the parameters, or as a variant of the MAP that ignores the prior and which therefore is unregularized. for gaussian mixtures, non parametric models, it doesn’t exist
 
-### A/B testing
+## A/B testing
 
-#### In an A/B test, how can you check if assignment to the various buckets was truly random?
+### In an A/B test, how can you check if assignment to the various buckets was truly random?
 
 * Plot the distributions of multiple features for both A and B and make sure that they have the same shape. More rigorously, we can conduct a permutation test to see if the distributions are the same.
 * MANOVA to compare different means
@@ -734,25 +1006,25 @@ A method for parameter optimization (fitting a model). We choose parameters so a
 
 * Verify the sampling algorithm is random.
 
-#### What would be the hazards of letting users sneak a peek at the other bucket in an A/B test?
+### What would be the hazards of letting users sneak a peek at the other bucket in an A/B test?
 
 The user might not act the same suppose had they not seen the other bucket. You are essentially adding additional variables of whether the user peeked the other bucket, which are not random across groups.
 
-#### How would you run an A/B test for many variants, say 20 or more?
+### How would you run an A/B test for many variants, say 20 or more?
 
 one control, 20 treatment, if the sample size for each group is big enough. Ways to attempt to correct for this include changing your confidence level (e.g. Bonferroni Correction) or doing family-wide tests before you dive in to the individual metrics (e.g. Fisher's Protected LSD).
 
-#### How would you run an A/B test if the observations are extremely right-skewed?
+### How would you run an A/B test if the observations are extremely right-skewed?
 
 lower the variability by modifying the KPI cap values percentile metrics log transform
 
-#### How would you design an experiment to determine the impact of latency on user engagement?
+### How would you design an experiment to determine the impact of latency on user engagement?
 
 The best way I know to quantify the impact of performance is to isolate just that factor using a slowdown experiment, i.e., add a delay in an A/B test.
 
-### Hypotesis testing
+## Hypotesis testing
 
-#### What is a p-value? What is the difference between type-1 and type-2 error?
+### What is a p-value? What is the difference between type-1 and type-2 error?
 
 A p-value is defined such that under the null hypothesis less than the fraction p of events have parameter values more extreme than the observed parameter. It is not the probability that the null hypothesis is wrong.
 
@@ -764,7 +1036,7 @@ type-2 error: not rejecting Ho when Ha is true - **power**
 
 1-sided and 2-sided p-value - (1 or 2 tails of distribution)
 
-#### p-hacking
+### p-hacking
 
 1) when there are many samples with several elements - will be false positive (5%)
 2) when p-value is small, you can not generate another element. Every time the size of sample have to be the same
@@ -837,6 +1109,24 @@ Unbiasedness means that the expectation of the estimator is equal to the populat
 
 # ML
 
+## optimization algoritms
+
+Newton's method - second derivative
+
+## pytorch
+
+### dynamic
+
+Conceptually, autograd keeps a record of data (tensors) and all executed operations (along with the resulting new tensors) in a directed acyclic graph (DAG) consisting of [Function](https://pytorch.org/docs/stable/autograd.html#torch.autograd.Function) objects. In this DAG, leaves are the input tensors, roots are the output tensors. By tracing this graph from roots to leaves, you can automatically compute the gradients using the chain rule.
+
+**DAGs are dynamic in PyTorch** An important thing to note is that the graph is recreated from scratch; after each `<span class="pre">.backward()</span>` call, autograd starts populating a new graph. This is exactly what allows you to use control flow statements in your model; you can change the shape, size and operations at every iteration if needed.
+
+### chain rule (when differentiating)
+
+**derivative of f(g(x)) is f'(g(x))⋅g'(x)**
+
+The chain rule states that the derivative of a composition of functions is equal to the product of the derivatives of the individual functions involved.
+
 ## transformers
 
 https://uproger.com/sozdajte-transformera-s-nulya-s-pomoshhyu-pytorch/
@@ -850,12 +1140,15 @@ https://uproger.com/sozdajte-transformera-s-nulya-s-pomoshhyu-pytorch/
 
 ## Metrics
 
+### convergence of bse and mse
+
+bse is faster, why?
+
 ### Auc roc
 
 TPR and FPR on axis
 
 > ROC is a **probability** curve and AUC represents the degree or measure of **separability.** It tells how much the model is capable of distinguishing between classes
-
 
 ![Alt text](../images/1_Uu-t4pOotRQFoyrfqEvIEg.webp)
 
@@ -975,7 +1268,96 @@ You have several variables that are positively correlated with your response, an
 * Leave the model as is, despite multicollinearity. The presence of multicollinearity doesn't affect the efficiency of extrapolating the fitted model to new data provided that the predictor variables follow the same pattern of multicollinearity in the new data as in the data on which the regression model is based.
 * principal component regression
 
+## Gan
+
+Generator and classificator - loss as difference between gerenated image and input image, classificator tries to find difference between input and generated image
+
 # Databases, pandas, DataFrame
+
+## Columnstore (dwh, analytic with fact table) and rowstore (transactions) based table
+
+Columnstore indexes are the standard for storing and querying large **data warehousing fact tables.** This index uses column-based data storage and query processing to achieve gains up to 10 times the query performance in your data warehouse over traditional row-oriented storage. You can also achieve gains up to 10 times the data compression over the uncompressed data size.
+
+!Columnstore take only columns, that are used in query, compress data, long time to write, delete rows (need to uncompress all data)
+
+* Columns store values from the same domain and commonly have similar values, which result in high compression rates. I/O bottlenecks in your system are minimized or eliminated, and memory footprint is reduced significantly.
+* High compression rates improve query performance by using a smaller in-memory footprint. In turn, query performance can improve because SQL Server can perform more query and data operations in memory.
+* Batch execution improves query performance, typically by two to four times, by processing multiple rows together.
+* Queries often select only a few columns from a table, which reduces total I/O from the physical media.
+
+! Rowstore for transactions
+
+**columnStore**
+
+A columnstore index is a technology for storing, retrieving, and managing data by using a columnar data format, called a  *columnstore* .
+
+A columnstore is data that's logically organized as a table with rows and columns, and physically stored in a column-wise data format.
+
+**Rowstore**
+
+A rowstore is data that's logically organized as a table with rows and columns, and physically stored in a row-wise data format. This format is the traditional way to store relational table data. In SQL Server, rowstore refers to a table where the underlying data storage format is a heap, a clustered index, or a memory-optimized table.
+
+Rowstore indexes perform best on queries that seek into the data, when searching for a particular value, or for queries on a small range of values. Use rowstore indexes with transactional workloads, OLTP workload
+
+!!! **Both**
+
+you can create an updatable **nonclustered columnstore index** on a rowstore table. The columnstore index stores a copy of the selected columns, so you need extra space for this data, but the selected data is compressed on average 10 times.
+
+## OLTP vs OLAP
+
+OLTP or Online Transaction Processing is **a type of data processing that consists of executing a number of transactions occurring concurrently**
+
+Online analytical processing (OLAP) is **software technology you can use to analyze business data from different points of view**
+
+Online analytical processing (OLAP) and online transaction processing (OLTP) are data processing systems that help you store and analyze business data. You can collect and store data from multiple sources—such as websites, applications, smart meters, and internal systems. OLAP combines and groups the data so you can analyze it from different points of view (**join, group by, data read)**. Conversely, OLTP stores and updates transactional data reliably and efficiently in high volumes(**write, update, delete)**
+
+## Star (snowflake) schema - data modelling technic for analytical purposes
+
+In the context of databases and data warehousing, dimension and fact tables are two fundamental components of the star schema or snowflake schema, which are common data modeling techniques used to organize and structure data for analytical purposes.
+
+1. Dimension Table:
+   A dimension table contains descriptive attributes that provide context and details about the data in a fact table. It represents the "who," "what," "where," "when," and "how" aspects of the data. Dimensions are used to slice and dice the data and form the basis for organizing information in a multidimensional structure. Each dimension typically corresponds to a single entity or category.
+
+For example, in a sales database, you might have dimension tables for:
+
+* Customers (with attributes like customer ID, name, address, etc.).
+* Products (with attributes like product ID, name, category, price, etc.).
+* Time (with attributes like date, month, year, etc.).
+* Locations (with attributes like location ID, city, country, etc.).
+
+2. Fact Table:
+   A fact table contains quantitative data and measures, usually numeric values, that represent business facts or events. It captures the "how much" or "how many" aspects of the data. Fact tables are typically large and contain foreign keys to the dimension tables, which establish relationships between the facts and the corresponding dimensions.
+
+In the sales example, the fact table might contain records of individual sales transactions, with measures like:
+
+* Sales Amount
+* Quantity Sold
+* Discount Applied
+* Profit
+
+Each row in the fact table corresponds to a specific business event or transaction and is associated with the appropriate dimension keys to link it to the corresponding entities in the dimension tables.
+
+The star schema and snowflake schema models are widely used in data warehousing and business intelligence systems to facilitate efficient querying and analysis of large datasets. By separating the **descriptive attributes** into dimension tables and the **quantitative data** into fact tables, these models help improve query performance and simplify complex analytical queries.
+
+## SCD slowly change dimension promlem (Kimball approach)
+
+A **slowly changing dimension** ( **SCD** ) in [data management](https://en.wikipedia.org/wiki/Data_management "Data management") and [data warehousing](https://en.wikipedia.org/wiki/Data_warehousing "Data warehousing") is a [dimension](https://en.wikipedia.org/wiki/Dimension_(data_warehouse)) "Dimension (data warehouse)") which contains relatively static [data](https://en.wikipedia.org/wiki/Data "Data") which can change slowly but unpredictably, rather than according to a regular schedule.Some examples of typical slowly changing dimensions are entities such as names of geographical locations, customers, or products.
+
+Some scenarios can cause [referential integrity](https://en.wikipedia.org/wiki/Referential_integrity "Referential integrity") problems.
+
+For example, a [database](https://en.wikipedia.org/wiki/Database "Database") may contain a [fact table](https://en.wikipedia.org/wiki/Fact_table "Fact table") that stores sales records. This fact table would be linked to dimensions by means of [foreign keys](https://en.wikipedia.org/wiki/Foreign_key "Foreign key"). One of these dimensions may contain data about the company's salespeople: e.g., the regional offices in which they work. However, the salespeople are sometimes transferred from one regional office to another. For historical sales reporting purposes it may be necessary to keep a record of the fact that a particular sales person had been assigned to a particular regional office at an earlier date, whereas that sales person is now assigned to a different regional office.
+
+Dealing with these issues involves SCD management methodologies referred to as Type 0 through 6. Type 6 SCDs are also sometimes called Hybrid SCDs.
+
+
+## Integrity of Database
+
+There are typically four types of integrity constraints that are enforced in a database:
+
+1. Entity Integrity: This constraint ensures that each row in a table is uniquely identifiable. It is usually maintained through the use of primary keys, which are unique identifiers for each row in the table.
+2. Referential Integrity: This constraint ensures the relationships between tables are maintained correctly. It ensures that foreign key values (references to another table's primary key) in one table match the primary key values of another related table, or are NULL.
+3. Domain Integrity: This constraint enforces rules about the valid values that can be stored in each column of a table. For example, specifying a column as numeric and not allowing non-numeric characters.
+4. Check Integrity: This constraint allows you to define custom rules that the data in a column must adhere to. For instance, you can enforce that ages must be positive numbers or that dates must be within a specific range.
 
 ## ACID
 
@@ -989,7 +1371,6 @@ ACID is an acronym that refers to the set of 4 key properties that define a tran
 The ACID properties (Atomicity, Consistency, Isolation, and Durability) are traditionally associated with !!!**relational** databases, specifically those that use a SQL interface. However, it is possible to implement these properties in other types of databases, such as NoSQL databases, as well.In general, the ACID properties are a set of characteristics that ensure that a database can maintain its integrity and consistency even in the face of concurrent access, errors, or failures.
 
 !!! MongoDB is ACID complient, Redis is not
-
 
 ## Datasets
 
@@ -1158,7 +1539,23 @@ https://telegra.ph/Sozdanie-geograficheskoj-karty-s-interaktivnymi-markerami-ruk
 
 # SQL
 
-test
+## database normalization
+
+Database normalization is the process of organizing a relational database schema to reduce redundancy and improve data integrity. It involves breaking down a database into multiple tables and establishing relationships between them in a structured manner.
+
+The main goals of database normalization are to eliminate data duplication, prevent anomalies during data manipulation, and ensure efficient data storage and retrieval. By following normalization principles, a database can achieve a higher level of data integrity, maintainability, and flexibility.
+
+There are several normal forms in database normalization, each representing a specific level of normalization. The most commonly known normal forms are:
+
+1. First Normal Form (1NF): Ensures that each column in a table contains only atomic values and there are no repeating groups of columns.
+2. Second Normal Form (2NF): Builds on 1NF and ensures that all non-key attributes are fully dependent on the primary key, eliminating partial dependencies.
+3. Third Normal Form (3NF): Builds on 2NF and ensures that there are no transitive dependencies, where a non-key attribute depends on another non-key attribute.
+
+There are additional normal forms beyond 3NF, such as Boyce-Codd Normal Form (BCNF) and Fourth Normal Form (4NF), which address further normalization requirements.
+
+Normalization involves analyzing the functional dependencies between attributes and identifying the appropriate table structures to minimize redundancy and dependency issues. By breaking down data into smaller, well-organized tables and establishing relationships using primary and foreign keys, normalization helps improve data integrity and reduce data anomalies like update anomalies, insertion anomalies, and deletion anomalies.
+
+It's important to note that normalization should be applied based on the specific requirements and characteristics of the data model and the application's use cases. Over-normalization or under-normalization can both lead to inefficiencies or complexity, so finding the right balance is key in database design.
 
 ## Data modelling
 
@@ -1181,6 +1578,28 @@ Data modeling: Create visual data models, including entity-relationship diagrams
 # System Design
 
 # Algorithms
+
+## np problem
+
+np - polinomial time to find solution
+
+p -polinomial time to check solution is correct
+
+np vs p class - millenium problem
+
+## Binary tree
+
+### Balancing of binary tree
+
+A binary tree is considered balanced when the heights of its left and right subtrees differ by at most 1 for every node in the tree. If a binary tree is not balanced, you can perform balancing operations to achieve balance. One common technique to balance a binary tree is called AVL tree balancing, which involves performing rotations to maintain balance.
+
+Here's a high-level overview of the AVL tree balancing algorithm:
+
+1. Calculate the balance factor for each node in the tree. The balance factor of a node is defined as the height of its left subtree minus the height of its right subtree.
+2. Identify the first unbalanced node in the tree. This is the node with a balance factor outside the range of -1 to 1.
+3. Perform rotations to restore balance. There are four types of rotations: left rotation, right rotation, left-right rotation, and right-left rotation. The type of rotation required depends on the pattern of imbalance found.
+4. After performing the necessary rotations, re-calculate the balance factors for all affected nodes in the tree.
+5. Repeat steps 2-4 until the entire tree is balanced.
 
 ## Greedy algorithm
 
@@ -1264,6 +1683,8 @@ def fibonacci(n):
 ## Djikstra algoritm (shortest distance in graph) - !uses heap
 
 ```python
+
+
 import heapq
 
 def dijkstra(graph, start):
@@ -1290,3 +1711,99 @@ graph = {
 }
 print(dijkstra(graph, 'A'))
 ```
+
+# Computer science
+
+## Storage of basic types
+
+1. float - single precision format IEEE
+
+Floating-point numbers are stored using a fixed number of bits in memory. The representation typically consists of three components:        sign, exponent, and mantissa.
+
+- Sign: The sign bit represents whether the number is positive or negative. It uses **1 bit,** where 0 denotes a positive number and 1 denotes a negative number
+
+* Exponent: The exponent represents the power of 2 by which the mantissa should be multiplied. It determines the scale of the number. In IEEE 754 single-precision format, the exponent uses **8 bits.**
+* Mantissa: The mantissa holds the significant digits of the number. It is a fractional part that, when multiplied by 2 raised to the exponent, represents the actual value. In IEEE 754 single-precision format, the mantissa uses **23 bits.**
+
+exponent -whole part (2 ** n)
+
+mantissa - fractional part, from 0 to 1
+
+number = 1.mantissa * 2**n
+
+**Example:** 3.14159
+
+sign = 0 bit (positive)
+
+biased exponent = 1000000 (biased, need to subtract 127) = 129-127 = **1** -> main part = 2****1** = 2
+
+mantissa = 10010010000111111011011 ( it is not binary, first power = -1, and every next power is negative)
+
+ 1 * 2^-1 + 0 * 2^-2 + 0 * 2^-3 + 1 * 2^-4 + 0 * 2^-5 + 0 * 2^-6 + 1 * 2^-7 + 0 * 2^-8 + 0 * 2^-9 + 0 * 2^-10 + 0 * 2^-11 + 1 * 2^-12 + 1 * 2^-13 + 1 * 2^-14 + 1 * 2^-15 + 1 * 2^-16 + 1 * 2^-17 + 0 * 2^-18 + 1 * 2^-19 + 1 * 2^-20 + 0 * 2^-21 + 1 * 2^-22 + 1 * 2^-23 = 0.57079637050628662109375
+
+mantissa multiplier = 1.mantissa = 1. 57079637050628662109375
+
+**Actual number** = 1.mantissa * 2^exponent = 0.57079637050628662109375 * 2^1 ~ 3.14159
+
+Binary represantion : 0 1000000 10010010000111111011011 ( sign exponent mantissa)
+
+Float number - 32 bit, max number 2^128 (main part, else fractional)
+
+2.The **`char`** type is used to store the integer value of a member of the representable character set. That integer value is the ASCII code corresponding to the specified character
+
+3.int stores as int (4 byte (32bit system) or 8 byte(64 bit system))
+
+# Git, file systems, Docker
+
+## Docker compose
+
+Docker Compose is a tool that builds on top of Docker and simplifies the management of multi-container applications. It allows you to define and run multi-container Docker applications using a declarative YAML file. With Docker Compose, you can specify the services, networks, and volumes required for your application in a single configuration file, making it easy to deploy complex applications that consist of multiple interconnected containers.
+
+The Compose file is a [YAML](http://yaml.org/) file defining:
+
+* [Version](https://github.com/compose-spec/compose-spec/blob/master/04-version-and-name.md) (Optional)
+* [Services](https://github.com/compose-spec/compose-spec/blob/master/05-services.md) (Required)
+* [Networks](https://github.com/compose-spec/compose-spec/blob/master/06-networks.md)
+* [Volumes](https://github.com/compose-spec/compose-spec/blob/master/07-volumes.md)
+* [Configs](https://github.com/compose-spec/compose-spec/blob/master/08-configs.md)
+* [Secret](https://github.com/compose-spec/compose-spec/blob/master/09-secrets.md)
+
+Computing components of an application are defined as [services](https://github.com/compose-spec/compose-spec/blob/master/05-services.md). A service is an abstract concept implemented on platforms by running the same container image, and configuration, one or more times.
+
+Services communicate with each other through [networks](https://github.com/compose-spec/compose-spec/blob/master/06-networks.md). In the Compose Specification, a network is a platform capability abstraction to establish an IP route between containers within services connected together. Low-level, platform-specific networking options are grouped into the Network definition and may be partially implemented on some platforms.
+
+Services store and share persistent data into [volumes](https://github.com/compose-spec/compose-spec/blob/master/07-volumes.md). The Specification describes such a persistent data as a high-level filesystem mount with global options. Actual platform-specific implementation details are grouped into the volumes definition and may be partially implemented on some platforms.
+
+!!docker compose to interact between containers
+
+## Git yaml configuration file (compare docs) - for ci/cd
+
+If you don’t have a runner:
+
+1. [Install GitLab Runner](https://docs.gitlab.com/runner/install/) on your local machine.
+2. [Register the runner](https://docs.gitlab.com/runner/register/) for your project. Choose the `shell` executor.
+
+**build-job**:
+  **stage**:**build**
+  **script**:
+    **-**echo "Hello, $GITLAB_USER_LOGIN!"
+
+## package managers
+
+yam, apt
+
+## text manipulation
+
+sed, awk
+
+`sed` stands for "stream editor" and is primarily used for performing text transformations on input streams (such as files or command outputs). It reads input line by line, applies specified commands, and outputs the modified text. `sed` uses simple and powerful regular expressions for pattern matching and replacement.
+
+`awk` is a versatile scripting language designed for text processing and data extraction. It operates on a per-line basis, splitting lines into fields based on a specified delimiter, and allows you to perform various operations on those fields. `awk` supports variables, conditional statements, loops, and built-in functions for data manipulation.
+
+## git submoduls
+
+It appears that you might be referring to "git submodules" rather than "git submodels." Git submodules are a feature in the Git version control system that allows you to include another Git repository as a subdirectory within your own repository. Submodules are useful when you want to incorporate external code or libraries into your project while keeping them separate and independently versioned.
+
+When you add a submodule to your Git repository, it creates a pointer to a specific commit in the submodule repository. This allows you to track and reference a specific version of the submodule within your main repository. Submodules can be updated to newer commits in the submodule repository, providing the ability to incorporate upstream changes.
+
+Using submodules involves adding, initializing, and updating the submodule within your repository. When you clone a repository with submodules, you need to initialize and update the submodules separately to fetch their contents. Git submodules provide a way to manage and integrate external code as part of your project while maintaining separate repositories and versioning for each submodule.
