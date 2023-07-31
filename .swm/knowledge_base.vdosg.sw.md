@@ -577,6 +577,26 @@ By reducing coupling and promoting loose coupling, you can create more flexible 
 
 ## 4.Modules
 
+### Installation
+
+pip install pip-tools
+
+pip-compile (uses requiriments.in)
+
+The `pip-compile` command lets you compile a `requirements.txt` file from your dependencies, specified in either `pyproject.toml`, `setup.cfg`, `setup.py`, or `requirements.in`
+
+requiriments.in example:
+
+librosa
+
+matplotlib
+
+mwparserfromhell
+
+svglib
+
+tensorflow==1.14
+
 ### Модуль, пакет, библиотека
 
 – это просто файл Python, который предназначен для импорта в скрипты или в другие модули. Он содержит функции, классы и глобальные переменные.
@@ -612,9 +632,34 @@ try: # попробовать сделать это except: # если блок 
 
 **Многопроцессорность** – это вариант реализации вычислений, когда для решения некоторой прикладной задачи используется несколько независимых процессоров. Процессоры независимы и не взаимодействуют друг с другом: они не используют одну и ту же область памяти и имеют строгую изоляцию между собой. Что касается приложений, то многопроцессорная обработка подходит для рабочих нагрузок с интенсивным использованием ЦП. Однако он имеет большой объем памяти, который пропорционален количеству процессоров.
 
+**Multiprocessing is the only truly parallel approach in Python** . Multiprocessing is generally used for **CPU intensive tasks** such as large matrix multiplications, parallel sorting a billion integers etc
+
 С другой стороны, в **многопоточных** приложениях потоки находятся внутри одного процессора. Следовательно, они используют одну и ту же область памяти: они могут изменять одни и те же переменные и могут мешать друг другу. В то время как процессы строго выполняются параллельно, в Python в данный момент времени выполняется только один поток, и это связано с глобальной блокировкой интерпретатора (GIL). Многопоточность подходит для приложений, связанных с вводом-выводом, таких как очистка веб-страниц или извлечение данных из базы данных.
 
 Если вы хотите узнать больше о многопоточности и многопроцессорности, я рекомендую вам ознакомиться с [этой статьей](https://medium.com/contentsquare-engineering-blog/multithreading-vs-multiprocessing-in-python-ece023ad55a).
+
+In  **multithreading** , we use a **single process** only but we can create multiple threads running in single process. In Python, due to the  **Global Interpreter Lock** , although we can create multiple threads in a process, **but at any given point in time, only a single thread is running** (i.e. can access the variable and function stack of the process).
+
+But since there is overhead in  **creating and destroying threads** , creating more threads beyond certain number do not improve the performance and they start degrading beyond that
+
+In asyncio, we have only a  **single process and a single thread** .
+
+There is an **event scheduler** known as the “ **Event Loop** ”. Think of the event loop as a  **circular queue** .
+
+> When the thread T is waiting for the URL 1 to be downloaded, the event scheduler assigns URL 2 to thread T and while URL 1 is being downloaded, T can start initiating request for URL 2 and then the event loop will assign the next URL to T.
+
+In other words asyncio facilitates asynchronous programming i.e. fire and forget
+
+In asyncio, a task can only start when the previous task in the queue ‘pauses’ but in multithreading, a task can start if there is any idle thread.
+
+Takeaways
+
+1. Use asyncio only when the  **number of tasks to complete are high** .
+2. Use asyncio only when the **tasks are time consuming** i.e. the time taken to complete a task is much higher than the time taken for the event loop to pickup and assign the next task to the thread.
+3. There could be scenarios where multithreading or normal synchronous operations wins over asyncio. **Evaluate **before finalizing the codes.
+4. **Avoid local file I/O** with asyncio.
+
+[https://medium.com/@mecha-mind/think-twice-before-using-asyncio-in-python-7683472cb7a3](asyncio_vs_multithreading)
 
 ### Multithreading code
 
@@ -963,6 +1008,32 @@ L(distr|x1, x2, x3, x4)
 
 \*\*probability is the quantity most people are familiar with which deals with predicting new data given a known model ("what is the probability of getting heads six times in a row flipping this \*\*[50:50](https://www.youtube.com/watch?v=pYxNSUDSFH4&t=3050s) coin?") while likelihood deals with fitting models given some known data ("what is the likelihood that this coin is/isn't rigged given that I just flipped heads six times in a row?"). I wanted to add this perspective because using the example in this clip, a likelihood quantity such as 0.12 is not meaningful to the layman unless it is explained exactly what 0.12 means: a measure of the sample's support for the assumed model i.e. low values either mean rare data or incorrect model!
 
+## Information, influance
+
+In information theory, the term "information" refers to a measure of the uncertainty or randomness associated with a message or a signal
+
+In this context, "information" is not necessarily related to the meaning or content of a message but rather to the reduction of uncertainty that the message provides to the receiver. The more uncertain the receiver is about the message before receiving it, the more information the message contains when received.
+
+Напоминание: функция правдоподобия L(x, θ)
+для дискретных наблюдений вероятность Pθ(X = x).
+для непрерывных наблюдений плотность наблюдения X.
+Правдоподобие L(X, θ) – наблюдаемое значение функции
+правдоподобия.
+Пусть Θ ⊂ R (один числовой параметр).
+
+![Alt text](image/knowledge_base.vdosg.sw/like_info.png)
+
+При определенных условиях (регулярности) влияние
+центрировано:
+
+Eθ [ U(X, θ) ] = 0 (когда ∑Pθ = 1 (const))
+
+Тогда
+
+!!! В частности, информация Фишера равна дисперсии L(x, θ)
+
+!!! чем больше информация - тем больше изменяется правдоподобие в результате изменения параметра θ -> тем случайная величина менее случайна. При минимальной информации вариации случайной величины практически нет, по -этому она близка к рандомной.
+
 ## Map, MLE and MOP
 
 [https://en.wikipedia.org/wiki/Maximum\\\_a\\\_posteriori\\\_estimation](https://en.wikipedia.org/wiki/Maximum\_a\_posteriori\_estimation) (about:blank)
@@ -1108,6 +1179,34 @@ An estimator is said to be **unbiased** if its bias is equal to zero for all val
 Unbiasedness means that the expectation of the estimator is equal to the population value we are estimating. This is desirable in inference because the goal is to explain the dataset as accurately as possible. However, this is not always desirable for data analysis or predictive modeling as there is the bias variance tradeoff. We sometimes want to prioritize the generalizability and avoid overfitting by reducing variance and thus increasing bias.
 
 # ML
+
+## GRU, LSTM, RNN, Transformens
+
+https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21
+
+To review, the Forget gate decides what is relevant to keep from prior steps. The input gate decides what information is relevant to add from the current step. The output gate determines what the next hidden state should be.
+
+!! input + prev hidden
+
+!!! sigmoid makes all values from 0 to 1 - > forget gate (when multiply)
+
+!!! tang makes all values from -1 to 1 - > normalize
+
+**Рекуррентные блоки** помогают регулировать входные веса нейронной сети для решения проблемы исчезающего градиента, которая является общей проблемой с рекуррентными нейронными сетями.
+
+Еще закрытые рекуррентные блоки используются в машинном  **переводе** . Они отличаются от LSTM, хотя тоже являются расширением для нейросетевого машинного обучения. В **GRU** на один гейт меньше, и работа строится по-другому: вместо входного, выходного и забывания, есть гейт обновления (`update gate`). Он определяет, сколько информации необходимо сохранить c последнего состояния и сколько информации пропускать с предыдущих слоев.
+
+Функции сброса гейта (**reset gate) ** похожи на затвор забывания у  **LSTM** , но расположение отличается. GRU всегда передают свое полное состояние, не имеют выходной затвор. Часто эти затвор функционирует как и LSTM, однако,  большим отличием заключается в следующем: в GRU затвор работают быстрее и легче в управлении (но также менее интерпретируемые). На практике они стремятся нейтрализовать друг друга, так как нужна большая нейросеть для восстановления выразительности (expressiveness), которая сводит на нет приросты в результате. Но в случаях, где не требуется экстра выразительности, GRU показывают лучше результат, чем LSTM.
+
+В дополнение к машинному преводу, модели нейронной сети, использующие рекуррентные единицы, могут использоваться для исследования генома человека, анализа почерка и многого другого. Некоторые из этих инновационных сетей используются для анализа фондового рынка и работы правительства. **Многие из них используют моделируемую способность машин запоминать информацию.**
+
+Одна из идей, сделавшая **RNN** неоправданно эффективными - "авторегрессия" (auto-regression), это значит, что созданная переменная **добавляется в последовательность в качестве входных данных.** В машинном обучении часто применяется эта техника, особенно в работе с временными рядами.
+
+Хотя рекуррентная сеть и должна работать со всей последовательностью, к сожалению, присутствует проблема " **затухающего градиента"** (vanishing gradient problem). Что значит, что более старые входы не влияют на текущий выход. Такие модели, как **LSTM** пытаются решить эту проблему, добавляя дополнительные параметры (картинка 2).
+
+Такие модели считывают ввод данных последовательно.
+
+Архитектура, в которой обработка последовательности производится сразу, что практически не оставляет места для потери информации, реализована в кодировщике модели Transformer. Эта характеристика позволяет модели изучать контекст переменной на основе всего его окружения. Кроме того, по сравнению с рекуррентными нейросетями, чаще всего они быстрее.
 
 ## optimization algoritms
 
@@ -1274,6 +1373,38 @@ Generator and classificator - loss as difference between gerenated image and inp
 
 # Databases, pandas, DataFrame
 
+## **Масштабирование через партиционирование, репликацию и шардинг**
+
+В момент, когда даже корректно настроенный сервер баз данных на достаточно мощном железе уже недостаточно хорошо справляется с нагрузками, производится масштабирование при помощи партиционирования, репликации и шардинга. Далее рассмотрим эти способы увеличения производительности СУБД.
+
+**Партиционирование (partitioning)**
+*Партиционирование* — это разбиение таблиц, содержащих большое количество записей, на логические части по неким выбранным администратором критериям. Партиционирование таблиц делит весь объем операций по обработке данных на несколько независимых и параллельно выполняющихся потоков, что существенно ускоряет работу СУБД. Для правильного конфигурирования параметров партиционирования необходимо, чтобы в каждом потоке было примерно одинаковое количество записей.
+
+Например, на новостных сайтах имеет смысл партиционировать записи по дате публикации, так как свежие новости на несколько порядков более востребованы и чаще требуется работа именно с ними, а не со всех архивом за годы существования новостного ресурса.
+
+**Репликация (replication)**
+*Репликация* — это синхронное или асинхронное копирование данных между несколькими серверами. Ведущие серверы часто называют мастерами (master), а ведомые серверы — слэйвами (slave). Более политкорректные современные названия — Лидер и Фолловер (leader & follower).
+
+Ведущие сервера используются для чтения и изменения данных, а ведомые — только для чтения. В классической схеме репликации обычно один мастер и несколько слэйвов, так как в большей части веб‑проектов операций чтения на несколько порядков больше, чем операций записи. Однако в более сложной схеме репликации может быть и несколько мастеров.
+
+Например, создание нескольких дополнительных slave‑серверов позволяет снять с основного сервера нагрузку и повысить общую производительность системы, а также можно организовать слэйвы под конкретные ресурсоёмкие задачи и таким образом, например, упростить составление серьёзных аналитических отчётов — используемый для этих целей slave может быть нагружен на 100%, но на работу других пользователей приложения это не повлияет.
+
+**Шардинг (sharding)**
+*Шардинг* — это прием, который позволяет распределять данные между разными физическими серверами. Процесс шардинга предполагает разнесения данных между отдельными шардами на основе некого ключа шардинга. Связанные одинаковым значением ключа шардинга сущности группируются в набор данных по заданному ключу, а этот набор хранится в пределах одного физического шарда. Это существенно облегчает обработку данных.
+
+Например, в системах типа социальных сетей ключом для шардинга может быть ID пользователя, таким образом все данные пользователя будут храниться и обрабатываться на одном сервере, а не собираться по частям с нескольких.
+
+## Materialization of data
+
+In the context of data, materialization refers to the process of creating or generating physical or persistent representations of data from its original form or source. This concept is commonly used in databases and data processing systems.
+
+When data is materialized, it is transformed from its virtual or abstract state into a tangible, concrete form that can be stored, accessed, and manipulated more efficiently. There are two primary forms of materialization in data:
+
+1. Materialized Views: In databases, a materialized view is a precomputed or pre-aggregated result of a query. Instead of recalculating the query every time it is executed, the results are stored in a table, making it faster to retrieve the data when the same query is executed again. Materialized views are commonly used to improve query performance, especially for complex and time-consuming queries.
+2. Materialization of Data Structures: This refers to the process of storing data structures, such as arrays, lists, trees, graphs, etc., in physical memory or persistent storage. By doing so, accessing and manipulating the data becomes more efficient, as it reduces the need for recalculating or reconstructing the data structure from scratch each time it is needed.
+
+Materialization can be beneficial for performance optimization, as it reduces the computational overhead required to obtain certain results. However, it also comes with a trade-off, as materialized data requires additional storage space and may need to be updated periodically to keep it in sync with the original data source.
+
 ## Columnstore (dwh, analytic with fact table) and rowstore (transactions) based table
 
 Columnstore indexes are the standard for storing and querying large **data warehousing fact tables.** This index uses column-based data storage and query processing to achieve gains up to 10 times the query performance in your data warehouse over traditional row-oriented storage. You can also achieve gains up to 10 times the data compression over the uncompressed data size.
@@ -1349,6 +1480,19 @@ For example, a [database](https://en.wikipedia.org/wiki/Database "Database") may
 
 Dealing with these issues involves SCD management methodologies referred to as Type 0 through 6. Type 6 SCDs are also sometimes called Hybrid SCDs.
 
+**Example** (https://www.holistics.io/blog/scd-cloud-data-warehouse/)
+
+let’s say that you are a retail store. You sell a bunch of products, and each product belongs to a specific department.
+
+One day, a pedantic staff member with itchy fingers decides to reorganize the products, and reassigns IntelliKidz 1.0 to the Strategy department instead.
+
+Type0 - do nothing, dimensions don't change (date of birth, id number)
+
+In a Type 1 solution, you do exactly as the pedantic staff member does, above. That is, you update the department column and then you forget about it.
+
+A Type 2 solution is more realistic. The idea here is to add a completely new entry to the product table. In this case, you copy over the old details, but update the product key
+
+The Type 3 response is to add a new column to the dimension table to capture the previous department
 
 ## Integrity of Database
 
@@ -1515,6 +1659,23 @@ subset=["std"], cmap="Reds"
 ).background_gradient(
 subset=["50%"], cmap="coolwarm"
 )
+
+# Numpy
+
+## lib.stride_tricks.as_strided - get deliberate slices of array
+
+https://uproger.com/prodvinutyj-numpy-ottachivajte-tryuki-s-shagami/
+
+Нарезка зигзагом 
+
+
+>>> x = np.asarray(range(1,26), np.int64).reshape(5,5)
+>>> as_strided(x, shape=(4,2), strides=(48,8))
+>>>
+>>
+
+
+
 
 # Useful libraries (python, DS)
 
@@ -1714,9 +1875,42 @@ print(dijkstra(graph, 'A'))
 
 # Computer science
 
+## Kolmogorov complexity (course)
+
+**Invariance theorem**
+
+**C**U(x)** **<** **C**U’**(x) + O(1)**
+
+For any TM(turing machine) computational complexity differes no more then O(1), for example Java and Python machine
+
+It does not matter which universal Turing machine U we choose. I.e. all **“**encoding methods” are ok.
+
+**Kolmogorov complexity formula**
+
+<img src="image/knowledge_base.vdosg.sw/Kol_complex.png" width='200' height='30'>
+
+Cu - Kolmogorov complexity
+|p| - size of binary code to programm output x (binary string of 0|1)
+U - universal Turing machine
+x- string to compute {0,1}*
+
+Minimal size of program in binary string, that we put to TM (turing machine) and get x. For All possible TM's difference will be O(1)
+
+**Incompressibility and randomness**
+
+For constant c>0, a string x ε {0,1}* is **c-**incompressible if C(x) ≥ |x|-c. For constant c, we often simply say that x is incompressible.
+
+incompressible strings pass all randomness tests, hence we call them random strings
+
+!!! gzip(compression) + KNN for text classification (rashka, twitter)
+
+**Godel theorem and computer science**
+
+!!! Theorem. The statement “x is incompressible” is not provable.(Godel’s Theorem **by** **Chaitin**) - > you can not prove **randomness**
+
 ## Storage of basic types
 
-1. float - single precision format IEEE
+1. float - single precision format IEEE, max float - **e ^38**
 
 Floating-point numbers are stored using a fixed number of bits in memory. The representation typically consists of three components:        sign, exponent, and mantissa.
 
@@ -1748,6 +1942,15 @@ mantissa multiplier = 1.mantissa = 1. 57079637050628662109375
 Binary represantion : 0 1000000 10010010000111111011011 ( sign exponent mantissa)
 
 Float number - 32 bit, max number 2^128 (main part, else fractional)
+
+!!! In *python* intereger saved as pointer to compound C structure - for dynamic typing
+
+- long ob_refcnt - reference count, to allocate memory
+- ob_type - type of value
+- size_t - size of data members
+- ob_digit[1] - actual integer value
+
+In c - it is label to position in memory, that contains integer
 
 2.The **`char`** type is used to store the integer value of a member of the representable character set. That integer value is the ASCII code corresponding to the specified character
 
@@ -1807,3 +2010,9 @@ It appears that you might be referring to "git submodules" rather than "git subm
 When you add a submodule to your Git repository, it creates a pointer to a specific commit in the submodule repository. This allows you to track and reference a specific version of the submodule within your main repository. Submodules can be updated to newer commits in the submodule repository, providing the ability to incorporate upstream changes.
 
 Using submodules involves adding, initializing, and updating the submodule within your repository. When you clone a repository with submodules, you need to initialize and update the submodules separately to fetch their contents. Git submodules provide a way to manage and integrate external code as part of your project while maintaining separate repositories and versioning for each submodule.
+
+ *Закрытый рекуррентный блок *  
+
+**(GRU**
+
+ ) является частью конкретной модели рекуррентной нейронной сети, которая намеревается использовать соединения через последовательность узлов для выполнения задач машинного обучения, связанных с памятью и кластеризацией, например, в распознавании речи.
