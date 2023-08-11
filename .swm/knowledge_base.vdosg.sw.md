@@ -1220,6 +1220,8 @@ Conceptually, autograd keeps a record of data (tensors) and all executed operati
 
 **DAGs are dynamic in PyTorch** An important thing to note is that the graph is recreated from scratch; after each `<span class="pre">.backward()</span>` call, autograd starts populating a new graph. This is exactly what allows you to use control flow statements in your model; you can change the shape, size and operations at every iteration if needed.
 
+after all call of backward()  - new graph, you can make changes after every iteration
+
 ### chain rule (when differentiating)
 
 **derivative of f(g(x)) is f'(g(x))⋅g'(x)**
