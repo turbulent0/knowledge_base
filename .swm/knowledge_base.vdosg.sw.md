@@ -1,12 +1,17 @@
 ---
 id: vdosg
 title: knowledge_base
+
 file_version: 1.1.2
-app_version: 1.8.1
+app_version: 1.8.
 ---
-> # Python
+# Python
 
 ## 1\. Data structures
+
+### typing
+
+Python is a [**dynamically typed**](https://en.wikipedia.org/wiki/Type_system#DYNAMIC) programming language, which means the types are only checked at runtime and a variable is allowed to change its type over its lifetime, whereas a [**statically typed**](https://en.wikipedia.org/wiki/Type_system#Static_type_checking) language like Java checks the types at compile time, and a variable is not allowed to change its type over its lifetime. On the other hand, Python is a [**strongly typed**](https://en.wikipedia.org/wiki/Strong_and_weak_typing) language because the types cannot be automatically converted at runtime. For example, you cannot have an addition calculation on integer `1` and string `"2"`, while in a **weakly typed** language such as JavaScript such calculation is allowed.
 
 ### type annotation, type conversion (implicit and explicit)
 
@@ -80,6 +85,14 @@ In fact, the `PriorityQueue` _implementation_ uses `heapq` under the hood to do 
 
 ### 1.6 Operators
 
+#### difference & and AND
+
+The difference is this: ``and`` and ``or`` gauge the truth or falsehood of *entire object*, while ``&`` and ``|`` refer to *bits within each object, !!**elementwise** comparision on !!**boolean values, use on !!!iterables***
+
+When you use ``and`` or ``or``, it's equivalent to asking Python to treat the object as a single Boolean entity.
+
+When you use ``&`` and ``|`` on **integers**, the expression operates on the bits of the element, applying the *and* or the *or* to the individual bits making up the number
+
 #### difference == and is
 
 Identity (is) and equality (==), can check by id(var), same or note memory cell
@@ -92,6 +105,10 @@ Identity (is) and equality (==), can check by id(var), same or note memory cell
   <b>Singleton </b> </font> -
 
  is a creational design pattern that ensures a class has only one instance and provides a global point of access to it. It restricts the instantiation of a class to a single object, allowing that object to be shared across the application.
+
+1. Logging Module (`logging`): The standard Python logging module, `logging`, can be considered a singleton for logging purposes. You can configure it globally and access it from any part of the application.
+2. Database Connections: Some database libraries like `SQLAlchemy` can handle connections in a singleton-like manner to ensure that only one database connection is used throughout the application.
+3. Caching Libraries: Some caching libraries like `cachetools` may use singleton-like behavior to ensure there's only one cache instance used across the application.
 
 Key characteristics of a singleton include:
 
@@ -111,6 +128,10 @@ class Singleton:
         return Singleton._instance
 
 ```
+
+!!! None in python - singlton python object and slow operations
+
+!!! Nan - native float number for all systems IEEE standart
 
 - <font size="5" >  
   <b>Decorator </b> </font> - 
@@ -277,19 +298,19 @@ Inversion of Control is often achieved through the use of a dependency injection
 
 ### Patterns structure in OOP
 
-Creational Patterns:
+***Creational Patterns:***
 
 Factory Method: Creates objects without specifying the exact class of the object to be created.
 Abstract Factory: Provides an interface for creating families of related or dependent objects without specifying their concrete classes.
 Singleton: Ensures a class has only one instance and provides a global point of access to it.
 Builder: Separates the construction of complex objects from their representation, allowing the same construction process to create different representations.
-Structural Patterns:
+***Structural Patterns:***
 
 Adapter: Converts the interface of a class into another interface clients expect, enabling classes to work together that otherwise couldn't.
 Decorator: Dynamically adds responsibilities to objects by wrapping them with one or more decorator objects.
 Composite: Composes objects into a tree structure to represent part-whole hierarchies. Clients can treat individual objects and compositions uniformly.
 Proxy: Provides a surrogate or placeholder for another object to control access to it.
-Behavioral Patterns:
+***Behavioral Patterns:***
 
 Observer: Defines a one-to-many dependency between objects, so that when one object changes state, all its dependents are notified and updated automatically.
 Strategy: Defines a family of interchangeable algorithms and encapsulates each one, allowing them to be used interchangeably based on the context.
@@ -900,6 +921,13 @@ async def _worker(self, i):
 
 with open("./large\_dataset.txt") as input\_file: for line in input\_file: process\_line(line)
 
+## Help, documentation
+
+?, ??
+
+str.**with**? - search for method
+help(L.insert)
+
 # Statistic and probability
 
 ## Mutual information, entropy
@@ -965,6 +993,25 @@ Let ![X_{n},Y_{n}](https://wikimedia.org/api/rest_v1/media/math/render/svg/ddd30
 on x and y axis are quantiles of two distributions, when distributions are similar line of points is x=y
 
 ## Distributions
+
+### Poisson distribution
+
+https://medium.com/towards-data-science/poisson-distribution-intuition-and-derivation-1059aeab90d
+
+Find number of events, that take place in the future
+
+!!!Is derived from binominal distribution, when there is more than one event in period of time through **n-> inf and p -> 0**
+
+limitations of binomial distribution:
+
+a) binary nature (only one event in period)
+
+b) you need to **know n**
+
+Poisson model **assumptions:**
+
+1) The average rate of events per unit time is constant ( can not use per hour when day and night hours are different, can not use month, when it is seasonality )
+2) Events are independent ( visitors of blog after someone famous talked about it, earthquake can cause aftershocks)
 
 ### lognorm distribution
 
@@ -1180,6 +1227,88 @@ Unbiasedness means that the expectation of the estimator is equal to the populat
 
 # ML
 
+## project bicycle rides
+
+daylight hours, dry day, day of week, percipitation, temperature, holiday,  precipitation *and* cold temperature,
+nonlinear trends within each variable (such as disinclination to ride at very cold and very hot temperatures)
+
+finer-grained information (such as the difference between a rainy morning and a rainy afternoon)
+
+correlations between days (such as the possible effect of a rainy Tuesday on Wednesday's numbers, or the effect of an unexpected sunny day after a streak of rainy days)
+
+## check feature importance std
+
+for linear model
+
+std_weights(feature importance) = np.std([model.fit(*resample(X, y)).coef_ for i in range(1000)], 0)
+
+## features engineering
+
+* from sklearn.preprocessing import PolynomialFeatures
+
+from sklearn.linear_model import LinearRegression
+
+from sklearn.pipeline import make_pipeline
+
+* GaussianFeatures(BaseEstimator, TransformerMixin)
+
+
+## validation curve - check overfitting (difference between train and val metrics) by iterate parameter
+
+```
+from sklearn.datasets import load_iris
+from sklearn.model_selection import ValidationCurveDisplay
+from sklearn.svm import SVC
+from sklearn.utils import shuffle
+X, y = load_iris(return_X_y=True)
+X, y = shuffle(X, y, random_state=0)
+ValidationCurveDisplay.from_estimator(
+   SVC(kernel="linear"), X, y, param_name="C", param_range=np.logspace(-7, 3, 10)
+)
+```
+
+## learning curve - check metrics if change volume of training data
+
+```
+from sklearn.datasets import load_iris
+from sklearn.model_selection import LearningCurveDisplay
+from sklearn.svm import SVC
+from sklearn.utils import shuffle
+X, y = load_iris(return_X_y=True)
+X, y = shuffle(X, y, random_state=0)
+LearningCurveDisplay.from_estimator(
+   SVC(kernel="linear"), X, y, train_sizes=[50, 80, 110], cv=5)
+```
+
+## missing values
+
+two schemas:
+
+1) mask that indicates missing values- more computation, storage
+2) sentinel value approach - special values for all types of values (in R 4 types in numpy -many), if many types sentinal value for every type
+   Nan for IEEE floating point convention
+   there is no equivalent NaN value for integers, strings, or other types.
+
+## Encoding
+
+One-hot encoding
+
+Label encoding
+
+Target encoding - when target is category ( target =1 -> partition of feature value when target ==1, weight) https://www.youtube.com/watch?v=589nCGeWG1w&ab_channel=StatQuestwithJoshStarmer
+
+k-fold target encoding
+
+**ordered target encoding** (cat boost, one by one sequentually, to not allow leakage) - = (cat_value_count(when target = 1))+0.05 / (n + 1)
+
+## Size of batchsize
+
+lesser batch size adds regularization on train, and is better when distributions are different for train and test.
+
+Best is specific optimal batch size for tran, if distiributions are different for train and test. And if distributions are the same - best is maximum batchsize.
+
+ML - batch size as parameter for finetuning
+
 ## GRU, LSTM, RNN, Transformens
 
 https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21
@@ -1211,6 +1340,51 @@ To review, the Forget gate decides what is relevant to keep from prior steps. Th
 ## optimization algoritms
 
 Newton's method - second derivative
+
+### Adam
+
+Adam (adaptive moment estimation) optimization algorithm. Designed to
+        combine the advantages of AdaGrad, which works well with sparse
+        gradients, and RMSProp, which works well in on-line and non-stationary
+        settings.
+
+w=w - step_size*m_hat/ (np.sqrt(v_hat) +epsilon)
+
+m_hat - exp moving avareges of  gradients means in minibatch
+
+v_hat - exp moving avareges of gradients variances in minibatch
+
+!!! All optimizares - how we update weights w = wt - lr * grad(Q)
+
+### SGD
+
+takes only one random sample of data for update, for faster calculation
+
+### Adagrad
+
+to deal with vanishing gradients, with sparse gradients
+
+Adjusts the learning rate of each weight based on the magnitudes of its gradients
+
+cache[t] = cache[t-1] + grad[t] ** 2
+
+update[t] = lr * grad[t] / (np.sqrt(cache[t]) + eps)
+param[t+1] = param[t] - update[t]
+
+### RMSProp
+
+deal well with on-line updates and non-stationary settings
+
+RMSProp optimizer. A refinement of Adagrad to reduce its aggressive,
+        monotonically decreasing learning rate. RMSProp uses a *decaying
+        average* of the previous squared gradients (second moment) rather than
+        just the immediately preceding squared gradient for its
+        `previous_update` value.
+
+cache[t] = decay * cache[t-1] + (1 - decay) * grad[t] ** 2
+update[t] = lr * grad[t] / (np.sqrt(cache[t]) + eps)
+
+param[t+1] = param[t] - update[t]
 
 ## pytorch
 
@@ -1278,6 +1452,26 @@ In GMMs, it is assumed that different sub-populations(***K*** in total) of ***X 
 ## PCA
 
 PCA is to find a *W *through SVD (singular value decomposition) so that the matrices *x *and *x *hat be as consistent as possible.
+
+!!Find number of components
+
+```python
+pca = PCA().fit(digits.data)
+plt.plot(np.cumsum(pca.explained_variance_ratio_))
+plt.xlabel('number of components')
+plt.ylabel('cumulative explained variance');
+```
+
+
+!! PCA as Noise Filtering
+
+```python
+pca = PCA(0.50).fit(noisy)
+pca.n_components_
+components = pca.transform(noisy)
+filtered = pca.inverse_transform(components)
+plot_digits(filtered)
+```
 
 ## NLP
 
@@ -1374,6 +1568,14 @@ You have several variables that are positively correlated with your response, an
 Generator and classificator - loss as difference between gerenated image and input image, classificator tries to find difference between input and generated image
 
 # Databases, pandas, DataFrame
+
+## eval, query
+
+standart filter df[()df.Qty > 5) & (df.ProdID > 10000)] - creates copies: tmp1 = df.Qty > 5, tmp2 =df.ProdID > 100000, tmp3 = tmp1&temp2
+
+! because vector operations allocate all arrays to compute !!**compound expressions**
+
+eval and query - uses numexpr library to compute !!**compound** expressions element by element
 
 ## **Масштабирование через партиционирование, репликацию и шардинг**
 
@@ -1518,6 +1720,14 @@ The ACID properties (Atomicity, Consistency, Isolation, and Durability) are trad
 
 !!! MongoDB is ACID complient, Redis is not
 
+## Pandas main structures (objects)
+
+Dataframe
+
+Series
+
+Index - immutable numpy array with set operations
+
 ## Datasets
 
 Yahoo webscope, kaggle, google datasets, FiveThirtyEight, githubs awesome, UCI, Pew Research Center (culture, sociology, social networks), data.world, buzzfeed
@@ -1562,15 +1772,13 @@ Yahoo webscope, kaggle, google datasets, FiveThirtyEight, githubs awesome, UCI, 
 
 ## pandas functions
 
-! pd.cut() - divide continious feature in categories (bins)
-
-pd.explode() - column of lists to columns with element of list
-
-pd.qcut() - divide in quantiles, for categorical vars
-
-df.nlargest - n largest elements in column
-
-!assign(over\_three\_hours=lambda dataframe: np.where(dataframe\["duration"\] > 180, "Yes", "No")) # Create new column called over\_three\_hours depending on duration > 180
+* from dateutil import parser
+  date = parser.parse("4th of July, 2015")
+* ! pd.cut() - divide continious feature in categories (bins)
+* pd.explode() - column of lists to columns with element of list
+* pd.qcut() - divide in quantiles, for categorical vars
+* df.nlargest - n largest elements in column
+* !assign(over\_three\_hours=lambda dataframe: np.where(dataframe\["duration"\] > 180, "Yes", "No")) # Create new column called over\_three\_hours depending on duration > 180
 
 ```python
 # Group by a date column, use a monthly frequency 
@@ -1580,7 +1788,40 @@ grouped = df.groupby(['category', pd.Grouper(key='date', freq='M')])
 monthly_revenue = grouped['revenue'].sum()
 ```
 
-Another function is `stack/unstack`, which can collapse/explode DataFrame indices. `crosstab` computes a cross-tabulation of two or more factors, and by default, computes a frequency table of the factors but can also compute other summary statistics.
+* Another function is `stack/unstack`, which can collapse/explode DataFrame indices. `crosstab` computes a cross-tabulation of two or more factors, and by default, computes a frequency table of the factors but can also compute other summary statistics.
+* np.allclose - compare two dataframes
+* np.split(indexes), np.hsplit(array, ind), np.vsplit(array, ind)
+* !head -4 data/president_heights.csv- shell command in ipynb
+* df.nbits, l.nbits
+* !!! numpy **broadcasting** to same dimensions
+
+for example pair wise difference = l1[np.newaxis, :] - l1.copy(:, np.newaxis) -> matrix of differences
+
+* !!! do not create additional column
+* counts, edges = np.histogram(x, bins)
+* from sklearn.manifold import Isomap
+
+  iso = Isomap(n_components=2)
+* numpy histogram
+
+```
+bins = np.linspace(-5, 5, 20)
+counts = np.zeros_like(bins)
+
+# find the appropriate bin for each x
+i = np.searchsorted(bins, x)
+print(i, counts)
+# add 1 to each of these bins
+np.add.at(counts, i, 1)
+```
+
+## append and concat
+
+Keep in mind that unlike the ``append()`` and ``extend()`` methods of Python lists, the ``append()`` method in Pandas does not modify the original object–instead it creates a new object with the combined data.
+
+It also is not a very efficient method, because it involves creation of a new index *and* data buffer.
+
+Thus, if you plan to do multiple ``append`` operations, it is generally better to build a list of ``DataFrame``s and pass them all at once to the ``concat()`` function
 
 ## when not use pandas
 
@@ -1668,16 +1909,12 @@ subset=["50%"], cmap="coolwarm"
 
 https://uproger.com/prodvinutyj-numpy-ottachivajte-tryuki-s-shagami/
 
-Нарезка зигзагом 
-
+Нарезка зигзагом
 
 >>> x = np.asarray(range(1,26), np.int64).reshape(5,5)
 >>> as_strided(x, shape=(4,2), strides=(48,8))
 >>>
 >>
-
-
-
 
 # Useful libraries (python, DS)
 
@@ -1694,11 +1931,32 @@ fake.name()
 snoop - debug
 nbdime: Полезная библиотека для контроля версий для Jupyter Notebook
 
+[pandera](https://github.com/unionai-oss/pandera "https://github.com/unionai-oss/pandera") предоставляет гибкий и удобный API для выполнения **проверки данных** на объектах типа **`dataframe`, spark, dask**, чтобы сделать конвейеры обработки данных более читаемыми и надежными, t-test of data
+
+**mypy** - check types wth type hints. **mypy computer.py** --ignore-missing-imports
+
+pydantic - check types of data (dictionaries, json)
+
+**rembg** - remove background from image
+
 # Visualization
 
-visualize map in dash, dynamic
+* visualize map in dash, dynamic
 
 https://telegra.ph/Sozdanie-geograficheskoj-karty-s-interaktivnymi-markerami-rukovodstvo-po-Plotly-Dash-05-26
+
+* grid = plt.GridSpec(2, 3, wspace=0.4, hspace=0.3) - to join and custom subplot sizes
+* !!sns.FacetGrid(tips, row="sex", col="time", margin_titles=True) - distribution of tips by sex and time
+* sns.catplot(x="day", data="total_bill", hue="sex", data=tips, kind="box")
+
+  sns.catplot(x="year", data=planets, aspect=4.0, kind='count',hue='method', order=range(2001, 2015))
+* sns.jointplot("total_bill", "tip", data=tips, kind='reg')
+* sns.pairplot(iris, hue='species', size=2.5);
+* iris['cluster'] = y_gmm
+
+  sns.lmplot("PCA1", "PCA2", data=iris, hue='species',
+
+  col='cluster', fit_reg=False);
 
 # SQL
 
@@ -1741,6 +1999,12 @@ Data modeling: Create visual data models, including entity-relationship diagrams
 # System Design
 
 # Algorithms
+
+## Binary indexed tree
+
+A Binary Indexed Tree (BIT), also known as a Fenwick Tree, is a data structure that allows efficient updates and queries on an array of values, particularly for range sum queries. It's designed to perform both point updates (changing the value of an element in the array) and range queries (computing the sum of a range of elements) in logarithmic time complexity.
+
+Python list has update complexity O(1) and range query complexity O(n)
 
 ## np problem
 
@@ -2013,7 +2277,7 @@ When you add a submodule to your Git repository, it creates a pointer to a speci
 
 Using submodules involves adding, initializing, and updating the submodule within your repository. When you clone a repository with submodules, you need to initialize and update the submodules separately to fetch their contents. Git submodules provide a way to manage and integrate external code as part of your project while maintaining separate repositories and versioning for each submodule.
 
- *Закрытый рекуррентный блок *  
+ *Закрытый рекуррентный блок *
 
 **(GRU**
 
