@@ -1227,14 +1227,56 @@ Unbiasedness means that the expectation of the estimator is equal to the populat
 
 # ML
 
-## project bicycle rides
+## Xai (kaggle)
 
-daylight hours, dry day, day of week, percipitation, temperature, holiday,  precipitation *and* cold temperature,
-nonlinear trends within each variable (such as disinclination to ride at very cold and very hot temperatures)
+These insights have many uses, including
 
-finer-grained information (such as the difference between a rainy morning and a rainy afternoon)
+* Debugging
+* Informing feature engineering
+* Directing future data collection
+* Informing human decision-making
+* Building Trust
 
-correlations between days (such as the possible effect of a rainy Tuesday on Wednesday's numbers, or the effect of an unexpected sunny day after a streak of rainy days)
+## Permutation importance
+
+**Permutation importance is calculated after a model has been fitted.** So we won't change the model or change what predictions we'd get for a given value of height, sock-count, etc.
+
+Instead we will ask the following question: If I randomly shuffle a single column of the validation data, leaving the target and all other columns in place, how would that affect the accuracy of predictions in that now-shuffled data?
+
+Permut importance can be used for feature selection, but you can not use with correlated feature and drop all correlated features
+
+```python
+def scorer(estimator, X, y):
+    y_pred = estimator.predict(X)
+    return rmse_func(y, y_pred)
+perm = PermutationImportance(model, random_state=1).fit(df_pred_96[cols + ['random']], df_pred_96.targ_qty_sales)
+eli5.explain_weights(perm, feature_names = df_pred_96[cols + ['random']].columns.tolist(), top=10)
+```
+
+## Partial dipandence plots (PDP)
+
+While feature importance shows what variables most affect predictions, partial dependence plots show how a feature affects predictions.
+
+This is useful to answer questions like:
+
+Controlling for all other house features, what impact do longitude and latitude have on home prices? To restate this, how would similarly sized houses be priced in different areas?
+
+Are predicted health differences between two groups due to differences in their diets, or due to some other factor?
+
+If you are familiar with **linear or logistic** regression models, partial dependence plots can be interpreted similarly to the coefficients in those models
+
+We will use the fitted model to predict our outcome (probability their player won "man of the match"). But we repeatedly alter the value for one variable to make a series of predictions. We could predict the outcome if the team had the ball only 40% of the time. We then predict with them having the ball 50% of the time. Then predict again for 60%. And so on. We trace out predicted outcomes (on the vertical axis) as we move from small values of ball possession to large values (on the horizontal axis).
+
+In this description, we used only a single row of data. Interactions between features may cause the plot for a single row to be atypical. So, we repeat that mental experiment with multiple rows from the original dataset, and we plot the average predicted outcome on the vertical axis.
+
+
+partial dependence plots
+from matplotlib import pyplot as plt
+from sklearn.inspection import PartialDependenceDisplay
+
+Create and plot the data
+disp1 = PartialDependenceDisplay.from_estimator(tree_model, val_X, ['Goal Scored'])
+plt.show()
 
 ## check feature importance std
 
@@ -1251,7 +1293,6 @@ from sklearn.linear_model import LinearRegression
 from sklearn.pipeline import make_pipeline
 
 * GaussianFeatures(BaseEstimator, TransformerMixin)
-
 
 ## validation curve - check overfitting (difference between train and val metrics) by iterate parameter
 
@@ -1449,9 +1490,21 @@ algorithm, but is more robust and therefore useful due to sophistication**
 
 In GMMs, it is assumed that different sub-populations(***K*** in total) of ***X ***follow a [normal distribution](https://en.wikipedia.org/wiki/Normal_distribution), although we only have information about the probability distribution of the overall population  ***X(*** hence the name Gaussian Mixture Model). Our task is to able to find the parameters of the ***K*** *gaussian’s* in order to visualize the data ***X ***for [*exploratory data analysis*](https://en.wikipedia.org/wiki/Exploratory_data_analysis)or make predictions on new data
 
+## PCA is linear, Manifold Learning is non-linear
+
 ## PCA
 
 PCA is to find a *W *through SVD (singular value decomposition) so that the matrices *x *and *x *hat be as consistent as possible.
+
+!!!Is used in support vector machine for feature selection
+
+RandomPCa
+
+```python
+from sklearn.decomposition import RandomizedPCA
+pca = RandomizedPCA(150)
+pca.fit(faces.data)
+```
 
 !!Find number of components
 
@@ -1461,7 +1514,6 @@ plt.plot(np.cumsum(pca.explained_variance_ratio_))
 plt.xlabel('number of components')
 plt.ylabel('cumulative explained variance');
 ```
-
 
 !! PCA as Noise Filtering
 
@@ -1770,7 +1822,14 @@ Yahoo webscope, kaggle, google datasets, FiveThirtyEight, githubs awesome, UCI, 
 
 Чем больше весов в вашей модели, тем больше требуется данных обучения.
 
-## pandas functions
+## ml functions and moduls
+
+* pairwise distances
+
+```python
+from sklearn.metrics import pairwise_distances
+D = pairwise_distances(X)
+```
 
 * from dateutil import parser
   date = parser.parse("4th of July, 2015")
@@ -2282,3 +2341,14 @@ Using submodules involves adding, initializing, and updating the submodule withi
 **(GRU**
 
  ) является частью конкретной модели рекуррентной нейронной сети, которая намеревается использовать соединения через последовательность узлов для выполнения задач машинного обучения, связанных с памятью и кластеризацией, например, в распознавании речи.
+
+# Projects
+
+## project bicycle rides
+
+daylight hours, dry day, day of week, percipitation, temperature, holiday,  precipitation *and* cold temperature,
+nonlinear trends within each variable (such as disinclination to ride at very cold and very hot temperatures)
+
+finer-grained information (such as the difference between a rainy morning and a rainy afternoon)
+
+correlations between days (such as the possible effect of a rainy Tuesday on Wednesday's numbers, or the effect of an unexpected sunny day after a streak of rainy days)
