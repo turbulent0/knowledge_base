@@ -1,5 +1,5 @@
 ---
-id: vdosg
+dlid: vdosg
 title: knowledge_base
 
 file_version: 1.1.2
@@ -1227,6 +1227,56 @@ Unbiasedness means that the expectation of the estimator is equal to the populat
 
 # ML
 
+## Clustering
+
+### Gaussian Mixture Models
+
+probabilistic
+
+Gaussian Mixture Models
+
+Though GMM is often categorized as a clustering algorithm, fundamentally it is an algorithm for *density estimation*.
+
+That is to say, the result of a GMM fit to some data is technically not a clustering model, but a generative probabilistic model describing the distribution of the data
+
+Notice the important point: this choice of number of components measures how well GMM works *as a density estimator*, not how well it works *as a clustering algorithm*.
+
+I'd encourage you to think of GMM primarily as a density estimator, and use it for clustering only when warranted within simple datasets.
+
+### K-Means
+
+!!! **greedy** algo
+
+The *k*-means algorithm searches for a pre-determined number of clusters within an unlabeled multidimensional dataset.
+
+It accomplishes this using a simple conception of what the optimal clustering looks like:
+
+- The "cluster center" is the arithmetic mean of all the points belonging to the cluster.
+- Each point is closer to its own cluster center than to other cluster centers.
+
+**Expectation–maximization (E–M)** is a powerful algorithm that comes up in a variety of contexts within data science.
+
+*k*-means is a particularly simple and easy-to-understand application of the algorithm, and we will walk through it briefly here.
+
+In short, the expectation–maximization approach here consists of the following procedure:
+
+1. Guess some cluster centers
+2. Repeat until converged
+
+1.*E-Step*: assign points to the nearest cluster center
+
+2.*M-Step*: set the cluster centers to the mean
+
+* The globally optimal result may not be achieved
+* k-means is limited to linear cluster boundaries (use  ``SpectralClustering`` estimator for non-linear, uses higher dimensional repr)
+* the number of clusters must be selected beforehand
+
+Usages:
+
+for difining digits
+
+*k*-means for color compression
+
 ## Xai (kaggle)
 
 These insights have many uses, including
@@ -1269,13 +1319,13 @@ We will use the fitted model to predict our outcome (probability their player wo
 
 In this description, we used only a single row of data. Interactions between features may cause the plot for a single row to be atypical. So, we repeat that mental experiment with multiple rows from the original dataset, and we plot the average predicted outcome on the vertical axis.
 
-partial dependence plots
+```python
+#partial dependence plots
 from matplotlib import pyplot as plt
-from sklearn.inspection import PartialDependenceDisplay
-
-Create and plot the data
+from sklearn.inspection import PartialDependenceDisplayCreate and plot the data
 disp1 = PartialDependenceDisplay.from_estimator(tree_model, val_X, ['Goal Scored'])
 plt.show()
+```
 
 ## check feature importance std
 
@@ -1523,6 +1573,10 @@ components = pca.transform(noisy)
 filtered = pca.inverse_transform(components)
 plot_digits(filtered)
 ```
+
+## TSNE
+
+t-SNE is a nonlinear embedding algorithm that is particularly adept at preserving points within **clusters**
 
 ## NLP
 
@@ -1860,18 +1914,15 @@ for example pair wise difference = l1[np.newaxis, :] - l1.copy(:, np.newaxis) ->
 * from sklearn.manifold import Isomap
 
   iso = Isomap(n_components=2)
+* using mask
+
+  ```
+  mask = (clusters == i)
+  labels[mask] = mode(digits.target[mask])[0]
+  ```
 * numpy histogram
 
-```
-bins = np.linspace(-5, 5, 20)
-counts = np.zeros_like(bins)
-
-# find the appropriate bin for each x
-i = np.searchsorted(bins, x)
-print(i, counts)
-# add 1 to each of these bins
-np.add.at(counts, i, 1)
-```
+  bins = np.linspace(-5, 5, 20)
 
 ## append and concat
 
@@ -2198,14 +2249,6 @@ print(dijkstra(graph, 'A'))
 ```
 
 # Computer science
-
-## Pigionhole principle(dirichle principle)
-
-In [mathematics](https://en.wikipedia.org/wiki/Mathematics "Mathematics"), the **pigeonhole principle** states that if **n** items are put into **m** containers, with *n* **>** *m*, then at least one container must contain more than one item
-
-The principle has several generalizations and can be stated in various ways. In a more quantified version: for [natural numbers](https://en.wikipedia.org/wiki/Natural_number "Natural number") **k** and **m**, if *n* **=** *km* **+ 1** objects are distributed among **m** sets, then the pigeonhole principle asserts that at least one of the sets will contain at least *k* **+ 1** objects.^[[4]](https://en.wikipedia.org/wiki/Pigeonhole_principle#cite_note-4)^ For arbitrary **n** and **m**, this generalizes to k+1=⌊(n−![{\displaystyle k+1=\lfloor (n-1)/m\rfloor +1=\lceil n/m\rceil ,}](https://wikimedia.org/api/rest_v1/media/math/render/svg/a3b6da98ef633eb7e131d1420dffebef2ef8786c)1)/m⌋+1=⌈n/m⌉, where ⌊⋯⌋![\lfloor \cdots \rfloor ](https://wikimedia.org/api/rest_v1/media/math/render/svg/eb460050848c108fac16e328ab1fb794b03c69fb)and ⌈⋯⌉![{\displaystyle \lceil \cdots \rceil }](https://wikimedia.org/api/rest_v1/media/math/render/svg/1be58b01b698162722616549f1f5477ae27d9faf)
-
- denote the [floor](https://en.wikipedia.org/wiki/Floor_function "Floor function") and [ceiling functions](https://en.wikipedia.org/wiki/Ceiling_function "Ceiling function"), respectively.
 
 ## Kolmogorov complexity (course)
 
