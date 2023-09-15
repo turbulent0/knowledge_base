@@ -2250,6 +2250,19 @@ print(dijkstra(graph, 'A'))
 
 # Computer science
 
+
+## Pigionhole principle(dirichle principle)
+
+In [mathematics](https://en.wikipedia.org/wiki/Mathematics "Mathematics"), the **pigeonhole principle** states that if **n** items are put into **m** containers, with *n* **>** *m*, then at least one container must contain more than one item
+
+The principle has several generalizations and can be stated in various ways. In a more quantified version: for [natural numbers](https://en.wikipedia.org/wiki/Natural_number "Natural number") **k** and **m**, if *n* **=** *km* **+ 1** objects are distributed among **m** sets, then the pigeonhole principle asserts that at least one of the sets will contain at least *k* **+ 1** objects.^[[4]](https://en.wikipedia.org/wiki/Pigeonhole_principle#cite_note-4)^ For arbitrary **n** and **m**, this generalizes to k+1=⌊(n−1)/m⌋+1=⌈�/�⌉,![{\displaystyle k+1=\lfloor (n-1)/m\rfloor +1=\lceil n/m\rceil ,}](https://wikimedia.org/api/rest_v1/media/math/render/svg/a3b6da98ef633eb7e131d1420dffebef2ef8786c)
+
+ where ⌊⋯⌋![\lfloor \cdots \rfloor ](https://wikimedia.org/api/rest_v1/media/math/render/svg/eb460050848c108fac16e328ab1fb794b03c69fb)
+
+ and ⌈⋯⌉![{\displaystyle \lceil \cdots \rceil }](https://wikimedia.org/api/rest_v1/media/math/render/svg/1be58b01b698162722616549f1f5477ae27d9faf)
+
+ denote the [floor](https://en.wikipedia.org/wiki/Floor_function "Floor function") and [ceiling functions](https://en.wikipedia.org/wiki/Ceiling_function "Ceiling function"), respectively.
+
 ## Kolmogorov complexity (course)
 
 **Invariance theorem**
