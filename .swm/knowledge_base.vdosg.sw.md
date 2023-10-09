@@ -1,5 +1,5 @@
 ---
-dlid: vdosg
+l0dlid: vdosg
 title: knowledge_base
 
 file_version: 1.1.2
@@ -98,6 +98,10 @@ When you use ``&`` and ``|`` on **integers**, the expression operates on the bit
 Identity (is) and equality (==), can check by id(var), same or note memory cell
 
 ## 2.Design patterns
+
+### Solid principles
+
+https://telegra.ph/Principy-SOLID-v-inzhenerii-dannyh-CHast-1-09-07
 
 ### Patterns
 
@@ -1227,6 +1231,8 @@ Unbiasedness means that the expectation of the estimator is equal to the populat
 
 # ML
 
+Nitty-gritty imperative approach with control vs simplicity of declarative approach of AI
+
 ## Clustering
 
 ### Gaussian Mixture Models
@@ -1522,6 +1528,14 @@ TPR and FPR on axis
 ## Decision trees
 
 Boosting can not extrapolate, only works with trained data
+
+## Lightgbm calibration
+
+when predict proba don't match real data frequencies
+
+calibration with logistic regression on leaves
+
+github and https://gdmarmerola.github.io/probability-calibration/
 
 ## VAE
 
@@ -1890,7 +1904,7 @@ D = pairwise_distances(X)
 * pd.explode() - column of lists to columns with element of list
 * pd.qcut() - divide in quantiles, for categorical vars
 * df.nlargest - n largest elements in column
-* !assign(over\_three\_hours=lambda dataframe: np.where(dataframe\["duration"\] > 180, "Yes", "No")) # Create new column called over\_three\_hours depending on duration > 180
+* !assign(over\_three\_hours=lambda dataframe: np.where(dataframe\["duration"\] > 180, "Yes", "No")) # Create new column called over\_three\_hours depending on duration > 180 - !!! can use in **chain operation**
 
 ```python
 # Group by a date column, use a monthly frequency 
@@ -1923,6 +1937,8 @@ for example pair wise difference = l1[np.newaxis, :] - l1.copy(:, np.newaxis) ->
 * numpy histogram
 
   bins = np.linspace(-5, 5, 20)
+* clip(1000, 2000) - boundary for values in column
+* rank - ?
 
 ## append and concat
 
@@ -2047,6 +2063,12 @@ nbdime: Полезная библиотека для контроля верси
 pydantic - check types of data (dictionaries, json)
 
 **rembg** - remove background from image
+
+leafmap - download goodle **buildings**
+
+poetry - package manager (all dependencies in .toml file, if you want reinstall dependencies delete .lock file)
+
+imblearn - pip install imbalanced-learn - library for SMOTE
 
 # Visualization
 
@@ -2249,7 +2271,6 @@ print(dijkstra(graph, 'A'))
 ```
 
 # Computer science
-
 
 ## Pigionhole principle(dirichle principle)
 
