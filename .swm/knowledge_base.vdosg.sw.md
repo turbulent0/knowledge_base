@@ -1,5 +1,5 @@
 ---
-id: vdosg
+l0dlid: vdosg
 title: knowledge_base
 
 file_version: 1.1.2
@@ -98,6 +98,10 @@ When you use ``&`` and ``|`` on **integers**, the expression operates on the bit
 Identity (is) and equality (==), can check by id(var), same or note memory cell
 
 ## 2.Design patterns
+
+### Solid principles
+
+https://telegra.ph/Principy-SOLID-v-inzhenerii-dannyh-CHast-1-09-07
 
 ### Patterns
 
@@ -1227,6 +1231,58 @@ Unbiasedness means that the expectation of the estimator is equal to the populat
 
 # ML
 
+Nitty-gritty imperative approach with control vs simplicity of declarative approach of AI
+
+## Clustering
+
+### Gaussian Mixture Models
+
+probabilistic
+
+Gaussian Mixture Models
+
+Though GMM is often categorized as a clustering algorithm, fundamentally it is an algorithm for *density estimation*.
+
+That is to say, the result of a GMM fit to some data is technically not a clustering model, but a generative probabilistic model describing the distribution of the data
+
+Notice the important point: this choice of number of components measures how well GMM works *as a density estimator*, not how well it works *as a clustering algorithm*.
+
+I'd encourage you to think of GMM primarily as a density estimator, and use it for clustering only when warranted within simple datasets.
+
+### K-Means
+
+!!! **greedy** algo
+
+The *k*-means algorithm searches for a pre-determined number of clusters within an unlabeled multidimensional dataset.
+
+It accomplishes this using a simple conception of what the optimal clustering looks like:
+
+- The "cluster center" is the arithmetic mean of all the points belonging to the cluster.
+- Each point is closer to its own cluster center than to other cluster centers.
+
+**Expectation–maximization (E–M)** is a powerful algorithm that comes up in a variety of contexts within data science.
+
+*k*-means is a particularly simple and easy-to-understand application of the algorithm, and we will walk through it briefly here.
+
+In short, the expectation–maximization approach here consists of the following procedure:
+
+1. Guess some cluster centers
+2. Repeat until converged
+
+1.*E-Step*: assign points to the nearest cluster center
+
+2.*M-Step*: set the cluster centers to the mean
+
+* The globally optimal result may not be achieved
+* k-means is limited to linear cluster boundaries (use  ``SpectralClustering`` estimator for non-linear, uses higher dimensional repr)
+* the number of clusters must be selected beforehand
+
+Usages:
+
+for difining digits
+
+*k*-means for color compression
+
 ## Xai (kaggle)
 
 These insights have many uses, including
@@ -1472,6 +1528,14 @@ TPR and FPR on axis
 ## Decision trees
 
 Boosting can not extrapolate, only works with trained data
+
+## Lightgbm calibration
+
+when predict proba don't match real data frequencies
+
+calibration with logistic regression on leaves
+
+github and https://gdmarmerola.github.io/probability-calibration/
 
 ## VAE
 
@@ -1836,7 +1900,7 @@ D = pairwise_distances(X)
 * pd.explode() - column of lists to columns with element of list
 * pd.qcut() - divide in quantiles, for categorical vars
 * df.nlargest - n largest elements in column
-* !assign(over\_three\_hours=lambda dataframe: np.where(dataframe\["duration"\] > 180, "Yes", "No")) # Create new column called over\_three\_hours depending on duration > 180
+* !assign(over\_three\_hours=lambda dataframe: np.where(dataframe\["duration"\] > 180, "Yes", "No")) # Create new column called over\_three\_hours depending on duration > 180 - !!! can use in **chain operation**
 
 ```python
 # Group by a date column, use a monthly frequency 
@@ -1862,16 +1926,9 @@ for example pair wise difference = l1[np.newaxis, :] - l1.copy(:, np.newaxis) ->
   iso = Isomap(n_components=2)
 * numpy histogram
 
-```
-bins = np.linspace(-5, 5, 20)
-counts = np.zeros_like(bins)
-
-# find the appropriate bin for each x
-i = np.searchsorted(bins, x)
-print(i, counts)
-# add 1 to each of these bins
-np.add.at(counts, i, 1)
-```
+  bins = np.linspace(-5, 5, 20)
+* clip(1000, 2000) - boundary for values in column
+* rank - ?
 
 ## append and concat
 
@@ -1996,6 +2053,12 @@ nbdime: Полезная библиотека для контроля верси
 pydantic - check types of data (dictionaries, json)
 
 **rembg** - remove background from image
+
+leafmap - download goodle **buildings**
+
+poetry - package manager (all dependencies in .toml file, if you want reinstall dependencies delete .lock file)
+
+imblearn - pip install imbalanced-learn - library for SMOTE
 
 # Visualization
 
