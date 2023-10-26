@@ -1119,7 +1119,23 @@ A method for parameter optimization (fitting a model). We choose parameters so a
 
 ## A/B testing
 
-### In an A/B test, how can you check if assignment to the various buckets was truly random?
+### estimating a/b test
+
+https://docs.geteppo.com/statistics/confidence-intervals/statistical-nitty-gritty/
+
+https://medium.com/jonathans-musings/ab-testing-101-5576de6466b
+
+frequentist and byesian methods
+
+!!! estimate relation metrics, not absolute (relational sigma by delta method)
+
+In a Bayesian framework, you start with a  *prior distribution* , which describes what you believe before running the experiment. Then, you run the experiment and collect data, which you use to *update* your prior: in essence, you combine your pre-experiment beliefs about what the lift would be, with the evidence you've gotten from the experiment, into a *new* set of beliefs, called the *posterior* (because it comes *after* gathering data). The estimated average lift is then just the mean of this posterior distribution.
+
+![Alt text](../images/bayes_params_update.PNG)
+
+### In an A/B test, how can you check if assignmen
+
+### t to the various buckets was truly random?
 
 * Plot the distributions of multiple features for both A and B and make sure that they have the same shape. More rigorously, we can conduct a permutation test to see if the distributions are the same.
 * MANOVA to compare different means
