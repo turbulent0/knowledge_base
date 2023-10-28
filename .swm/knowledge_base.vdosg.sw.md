@@ -9,6 +9,27 @@ app_version: 1.8.
 
 ## 1\. Data structures
 
+### defaultdict
+
+```python
+from collections import defaultdict
+#Creating a defaultdict where the key is an int and the default value is 0
+default_int_dict = defaultdict(int)
+```
+
+### hashable vs unmutable
+
+!!! hashable -> unmutable, but not reverse
+
+!!! necessery condition, but not sufficient
+
+* In many programming environments, including Python, for an object to be hashable, it often needs to be immutable. This is because the hash value of the object should not change over time. If an object is mutable and its contents are changed, its hash value would change, leading to unpredictable behavior in hash-based data structures.
+
+However, it's important to note:
+
+* Not all immutable objects are necessarily hashable. For instance, while tuples are immutable, they are only hashable if all their elements are hashable.
+* An object being immutable doesn't automatically mean it's suitable to be used as a dictionary key or in a set. It needs to be explicitly defined as hashable (e.g., by implementing the `__hash__` method in its class definition).
+
 ### typing
 
 Python is a [**dynamically typed**](https://en.wikipedia.org/wiki/Type_system#DYNAMIC) programming language, which means the types are only checked at runtime and a variable is allowed to change its type over its lifetime, whereas a [**statically typed**](https://en.wikipedia.org/wiki/Type_system#Static_type_checking) language like Java checks the types at compile time, and a variable is not allowed to change its type over its lifetime. On the other hand, Python is a [**strongly typed**](https://en.wikipedia.org/wiki/Strong_and_weak_typing) language because the types cannot be automatically converted at runtime. For example, you cannot have an addition calculation on integer `1` and string `"2"`, while in a **weakly typed** language such as JavaScript such calculation is allowed.
@@ -52,6 +73,12 @@ print('Hey %s %s' % (name, name))
 print( "My name is {}".format((name)) )
 
 ### 1.2 Lists
+
+#### append
+
+O(1), but every time, when list hits max capacity it doubles and n operations, but overall it is O(1)
+
+left append is O(n) operations
 
 #### copy and deepcopy()
 
@@ -575,6 +602,16 @@ To clarify, the `function` type is both a class and the type of functions in Pyt
 
 Используйте методы **str** и \__repr_ _str_ - readable **repr** - unumbigous str(3) == str("3")
 
+For a `datetime` object like `datetime.datetime(2023, 10, 8, 12, 34, 56)`, the representations would be:
+
+* Using `repr()`: 'datetime.datetime(2023, 10, 8, 12, 34, 56)'
+* Using `str()`: '2023-10-08 12:34:56'
+
+As you can see:
+
+* The `repr()` version provides a detailed representation that could be used to **recreate** the object.
+* The `str()` version provides a human-readable format.
+
 ### перегрузка операторов
 
 > под операторами в данном контексте понимаются не только знаки +, -, \*, /, обеспечивающие операции сложения, вычитания и др., но также специфика синтаксиса языка, обеспечивающая операции создания объекта, вызова объекта как функции, обращение к элементу объекта по индексу, вывод объекта
@@ -934,6 +971,22 @@ help(L.insert)
 
 # Statistic and probability
 
+## congugate prior
+
+https://en.wikipedia.org/wiki/Conjugate_prior
+
+!!hyperparameters of cogugate prior - pseudo-observations of successess and failures, when we add new data
+
+## method jack-nife for analys of confidence intervals (mapie library)
+
+sampling without replacement
+
+В каждом случае регрессии jackknife модель подгоняется ко всем точкам данных, исключая пару (Xi, Yi). Это позволяет вычислить остатки метода leave-one-out. Интерпретируя такие остатки как несоответствия, мы можем оценить квантиль и определить интервалы прогнозирования, как в случае индуктивного конформного прогнозирования. Поскольку данный метод борется с избыточной подгонкой, используя для вычислений остатки вне выборки, теоретически ожидается, что он обеспечит адекватный охват.
+
+Отличием методов jackknife и jackknife+ с точки зрения построения интервалов прогнозирования является использование в последнем методе в тестовой точке leave-one-out-прогнозов. Это делается для учета изменчивости подогнанной функции регрессии, дополняя квантили leave-one-out-остатков, используемых в методе jackknife. Такое усовершенствование позволяет методу jackknife+ обеспечивать надежные гарантии охвата независимо от распределения точек данных и для любого алгоритма, симметрично обрабатывающего точки обучения.
+
+Однако метод jackknife+ отличается тем, что для учета изменчивости подогнанной функции регрессии в тестовой точке используются leave-one-out-прогнозы, а также квантили leave-one-out-остатков, как при кросс-конформном прогнозировании.
+
 ## Mutual information, entropy
 
 Mutual information shows how change in one variable is related to change in target (like r^2 for descrite variables, if var is continious you can make bins). It is related to entropy ( sum of prob and log of prob multiplication )
@@ -991,10 +1044,28 @@ Let ![X_{n},Y_{n}](https://wikimedia.org/api/rest_v1/media/math/render/svg/ddd30
 
 ## Statistic tests
 
+<img src="/Users/maxymusenko/Programming/knowledge_base/images/stat_tests.jpeg" alt="drawing" width="500"/>
+
 ### Q-Q graph (quantile-quantile)
 
  to compare to distributions by quantiles
 on x and y axis are quantiles of two distributions, when distributions are similar line of points is x=y
+
+### Stat Tests
+
+CLT holds:
+
+Anova - >= 3 groups of numbers need to compare and define whether they are from the same distribution
+
+student t-test - compare two samples with normal distribution, whether from the same sample, sigma **unknown,** size < 30, **equal** sigma, if not(**welch's t-test**)
+
+z-test - compare two samples with normal distribution, sigma and mean known, size of sample > 30
+
+chi -test - compare two samples with categorical values
+
+### Kolmogorov-smirnov test
+
+is a [nonparametric test](https://en.wikipedia.org/wiki/Nonparametric_statistics "Nonparametric statistics") of the equality of continuous (or discontinuous, see [Section 2.2](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test#Discrete_and_mixed_null_distribution)), one-dimensional [probability distributions](https://en.wikipedia.org/wiki/Probability_distribution "Probability distribution") that can be used to compare a [sample](https://en.wikipedia.org/wiki/Random_sample "Random sample") with a reference probability distribution (one-sample K–S test), or to compare two samples (two-sample K–S test)
 
 ## Distributions
 
@@ -1150,6 +1221,9 @@ The best way I know to quantify the impact of performance is to isolate just tha
 
 A p-value is defined such that under the null hypothesis less than the fraction p of events have parameter values more extreme than the observed parameter. It is not the probability that the null hypothesis is wrong.
 
+!!! observing an effect or more extreme given the null hypothesis:
+P(X >= x | Ho)
+
 **!!! p-value -  type 1 error, false positive**
 
 type-1 error: rejecting Ho when Ho is true   - **p-value**
@@ -1211,12 +1285,6 @@ In [statistics](https://en.wikipedia.org/wiki/Statistics), the **bias of an esti
 
 <br/>
 
-<br/>
-
-<br/>
-
-<br/>
-
 <div align="center"><img src="../../../Downloads/biased2.png" style="width:'50%'"/></div>
 
 <br/>
@@ -1232,6 +1300,13 @@ Unbiasedness means that the expectation of the estimator is equal to the populat
 # ML
 
 Nitty-gritty imperative approach with control vs simplicity of declarative approach of AI
+
+## Balance data
+
+- choose proper metric
+- resampling
+- smote (adasin, smote+tomek, smote + enn)
+- parameters in model
 
 ## Clustering
 
@@ -1502,6 +1577,20 @@ The chain rule states that the derivative of a composition of functions is equal
 
 https://uproger.com/sozdajte-transformera-s-nulya-s-pomoshhyu-pytorch/
 
+### attention sinks
+
+Using window attention with attention sink tokens allows pretrained chat-style LLMs, such as all Llama, Mistral, MPT, Falcon, and GPT-NeoX (Pythia) models, to stay fluent across hundreds of subsequent prompts, unlike when these models are loaded using transformers. Furthermore, this approach allows for constant memory usage, while most LLMs loaded with transformers have linear space complexity resulting in memory issues.
+
+Using this form of attention is as simple as importing your model class from attention_sinks rather than transformers:
+
+```
+from attention_sinks import AutoModel
+
+model = AutoModel.from_pretrained("mistralai/Mistral-7B-Instruct-v0.1", device_map="auto")
+```
+
+https://huggingface.co/blog/tomaarsen/attention-sinks
+
 ## How to make normal distribution:
 
 * log transform
@@ -1671,6 +1760,11 @@ collinearity can be detected :
 * correlation matrix
 * VIF
 * PCA, PCR
+
+non-linear correlation detection:
+
+- maximum information coefficient
+- hilbert-shmidt independence criterion
 
 **principal component regression** ( **PCR** ) is a [regression analysis](https://en.wikipedia.org/wiki/Regression_analysis) technique that is based on [principal component analysis](https://en.wikipedia.org/wiki/Principal_component_analysis) (PCA). More specifically, PCR is used for [estimating](https://en.wikipedia.org/wiki/Estimation) the unknown [regression coefficients](https://en.wikipedia.org/wiki/Linear_regression) in a [standard linear regression model](https://en.wikipedia.org/wiki/Linear_regression).
 
@@ -2010,6 +2104,10 @@ df.query('category == "electronics"').replace(
 
 Before reading data files, you observe their top few rows with `cat file_name.extension` to decide which data types you want to use for the columns. Then, when using `read_`* functions, you fill out the `dtype` parameter for each column instead of letting Pandas decide for itself.
 
+!!! filter with parket
+
+`pd.read_parquet(filen_name, filters = [('id', '==', '3000')])`
+
 You also perform data manipulation *inplace* as much as possible. Without it, you know that Pandas spawns off copies of the DataFrames and Series, littering your memory. Additionally, you have a very good grip of classes and parameters like `pd.Categorical` and `chunksize`.
 
 ```python
@@ -2043,6 +2141,12 @@ https://uproger.com/prodvinutyj-numpy-ottachivajte-tryuki-s-shagami/
 
 # Useful libraries (python, DS)
 
+pmdarima -autoarima for time series
+
+mapie - predictions with confidence intervals
+
+lazypredict - 25 classifiers without finetuning
+
 anonympy - anonimization of tabular, visual and pdf data
 
 folium - visualization of interactive maps
@@ -2069,6 +2173,15 @@ leafmap - download goodle **buildings**
 poetry - package manager (all dependencies in .toml file, if you want reinstall dependencies delete .lock file)
 
 imblearn - pip install imbalanced-learn - library for SMOTE
+
+mplcursors - for annotation visualitationI
+
+```python
+# installation for base environment
+conda install -n base -c conda-forge widgetsnbextension
+conda install -n pyenv -c conda-forge ipywidgets
+
+```
 
 # Visualization
 
