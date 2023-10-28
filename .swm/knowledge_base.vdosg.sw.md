@@ -467,9 +467,29 @@ return log\_function\_called
 * cache (hashes of files, flat structure for tracking data changes)
 * remote (local external) storage (need access) - remote cache or(and) output
 
-> CREATE dvc in repo +1. dvc with local storage of cache and outputs (example im\_sales) you need do dvc folder "data 1.1 dvc init git status Changes to be committed: new file: .dvc/.gitignore new file: .dvc/config ... git commit -m "Initialize DVC" 1.2 dvc remote add {name} 'path/to/remote/**cache** storage (for cache) - can be local path ('C:\_Work\\datasets or ) 1.3 dvc add data (adds outputs to local cache (.dvc/cache)) -> data.dvc git add data/data.xml.dvc (add .) git commit -m "Add raw data" git push 1.4 dvc push - push to remote storage **cache** Make changes dvc add data & git commit & git push Switch between versions git checkout & dvc checkout
+> CREATE dvc in repo 
 >
-> **dvc pull** 2. remote cache 1.1 dvc init git status Changes to be committed: new file: .dvc/.gitignore new file: .dvc/config ... git commit -m "Initialize DVC" 1.2 dvc remote add {name} 'path/to/remote/**cache** storage (for cache) - can be local path ('C:\_Work\\datasets or ) 1.3 dvc config cache.s3 {name} 1.4 dvc add **data** (local data) -> data.dvc then git commit & git push dvc add --external path/to/**data** (external data) -> data.dvc, then git commit&git push
+> +1. dvc with local storage of cache and outputs (example im\_sales) you need do dvc folder "data 
+>
+> 1.1 dvc init git status
+>
+>  Changes to be committed: new file: .dvc/.gitignore new file: .dvc/config ... git commit -m "Initialize DVC"
+>
+>  1.2 dvc remote add {name} 'path/to/remote/**cache** storage (for cache) - can be local path ('C:\_Work\\datasets or ) 
+>
+> 1.3 dvc add data (adds outputs to local cache (.dvc/cache)) -> data.dvc git add data/data.xml.dvc (add .) git commit -m "Add raw data" git push 
+>
+> 1.4 dvc push - push to remote storage **cache** Make changes dvc add data & git commit & git push Switch between versions git checkout & dvc checkout
+>
+> **dvc pull** 2. remote cache
+>
+>  1.1 dvc init git status Changes to be committed: new file: .dvc/.gitignore new file: .dvc/config ... git commit -m "Initialize DVC" 
+>
+> 1.2 dvc remote add {name} 'path/to/remote/**cache** storage (for cache) - can be local path ('C:\_Work\\datasets or ) 
+>
+> 1.3 dvc config cache.s3 {name} 
+>
+> 1.4 dvc add **data** (local data) -> data.dvc then git commit & git push dvc add --external path/to/**data** (external data) -> data.dvc, then git commit&git push
 
 USAGE and REPRODUCTION of repo for others (im\_sales)
 
@@ -1190,7 +1210,23 @@ A method for parameter optimization (fitting a model). We choose parameters so a
 
 ## A/B testing
 
-### In an A/B test, how can you check if assignment to the various buckets was truly random?
+### estimating a/b test
+
+https://docs.geteppo.com/statistics/confidence-intervals/statistical-nitty-gritty/
+
+https://medium.com/jonathans-musings/ab-testing-101-5576de6466b
+
+frequentist and byesian methods
+
+!!! estimate relation metrics, not absolute (relational sigma by delta method)
+
+In a Bayesian framework, you start with a  *prior distribution* , which describes what you believe before running the experiment. Then, you run the experiment and collect data, which you use to *update* your prior: in essence, you combine your pre-experiment beliefs about what the lift would be, with the evidence you've gotten from the experiment, into a *new* set of beliefs, called the *posterior* (because it comes *after* gathering data). The estimated average lift is then just the mean of this posterior distribution.
+
+![Alt text](../images/bayes_params_update.PNG)
+
+### In an A/B test, how can you check if assignmen
+
+### t to the various buckets was truly random?
 
 * Plot the distributions of multiple features for both A and B and make sure that they have the same shape. More rigorously, we can conduct a permutation test to see if the distributions are the same.
 * MANOVA to compare different means
@@ -1400,13 +1436,13 @@ We will use the fitted model to predict our outcome (probability their player wo
 
 In this description, we used only a single row of data. Interactions between features may cause the plot for a single row to be atypical. So, we repeat that mental experiment with multiple rows from the original dataset, and we plot the average predicted outcome on the vertical axis.
 
-```python
-#partial dependence plots
+partial dependence plots
 from matplotlib import pyplot as plt
-from sklearn.inspection import PartialDependenceDisplayCreate and plot the data
+from sklearn.inspection import PartialDependenceDisplay
+
+Create and plot the data
 disp1 = PartialDependenceDisplay.from_estimator(tree_model, val_X, ['Goal Scored'])
 plt.show()
-```
 
 ## check feature importance std
 
@@ -1676,10 +1712,6 @@ components = pca.transform(noisy)
 filtered = pca.inverse_transform(components)
 plot_digits(filtered)
 ```
-
-## TSNE
-
-t-SNE is a nonlinear embedding algorithm that is particularly adept at preserving points within **clusters**
 
 ## NLP
 
@@ -2022,12 +2054,6 @@ for example pair wise difference = l1[np.newaxis, :] - l1.copy(:, np.newaxis) ->
 * from sklearn.manifold import Isomap
 
   iso = Isomap(n_components=2)
-* using mask
-
-  ```
-  mask = (clusters == i)
-  labels[mask] = mode(digits.target[mask])[0]
-  ```
 * numpy histogram
 
   bins = np.linspace(-5, 5, 20)
