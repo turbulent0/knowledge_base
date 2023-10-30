@@ -467,27 +467,27 @@ return log\_function\_called
 * cache (hashes of files, flat structure for tracking data changes)
 * remote (local external) storage (need access) - remote cache or(and) output
 
-> CREATE dvc in repo 
+> CREATE dvc in repo
 >
-> +1. dvc with local storage of cache and outputs (example im\_sales) you need do dvc folder "data 
+> +1. dvc with local storage of cache and outputs (example im\_sales) you need do dvc folder "data
 >
 > 1.1 dvc init git status
 >
->  Changes to be committed: new file: .dvc/.gitignore new file: .dvc/config ... git commit -m "Initialize DVC"
+> Changes to be committed: new file: .dvc/.gitignore new file: .dvc/config ... git commit -m "Initialize DVC"
 >
->  1.2 dvc remote add {name} 'path/to/remote/**cache** storage (for cache) - can be local path ('C:\_Work\\datasets or ) 
+> 1.2 dvc remote add {name} 'path/to/remote/**cache** storage (for cache) - can be local path ('C:\_Work\\datasets or )
 >
-> 1.3 dvc add data (adds outputs to local cache (.dvc/cache)) -> data.dvc git add data/data.xml.dvc (add .) git commit -m "Add raw data" git push 
+> 1.3 dvc add data (adds outputs to local cache (.dvc/cache)) -> data.dvc git add data/data.xml.dvc (add .) git commit -m "Add raw data" git push
 >
 > 1.4 dvc push - push to remote storage **cache** Make changes dvc add data & git commit & git push Switch between versions git checkout & dvc checkout
 >
 > **dvc pull** 2. remote cache
 >
->  1.1 dvc init git status Changes to be committed: new file: .dvc/.gitignore new file: .dvc/config ... git commit -m "Initialize DVC" 
+> 1.1 dvc init git status Changes to be committed: new file: .dvc/.gitignore new file: .dvc/config ... git commit -m "Initialize DVC"
 >
-> 1.2 dvc remote add {name} 'path/to/remote/**cache** storage (for cache) - can be local path ('C:\_Work\\datasets or ) 
+> 1.2 dvc remote add {name} 'path/to/remote/**cache** storage (for cache) - can be local path ('C:\_Work\\datasets or )
 >
-> 1.3 dvc config cache.s3 {name} 
+> 1.3 dvc config cache.s3 {name}
 >
 > 1.4 dvc add **data** (local data) -> data.dvc then git commit & git push dvc add --external path/to/**data** (external data) -> data.dvc, then git commit&git push
 
@@ -2165,7 +2165,17 @@ https://uproger.com/prodvinutyj-numpy-ottachivajte-tryuki-s-shagami/
 >>>
 >>
 
-# Useful libraries (python, DS)
+# Useful modules (python, DS)
+
+## Useful functions in sklearn, scipy
+
+sklearn.model_selection.TimeSeriesSplit - split time-series data
+
+sklearn.model_selection.permutation_test_score - score on cv with p-value
+
+
+
+## Useful libraries
 
 pmdarima -autoarima for time series
 
@@ -2206,6 +2216,14 @@ mplcursors - for annotation visualitationI
 # installation for base environment
 conda install -n base -c conda-forge widgetsnbextension
 conda install -n pyenv -c conda-forge ipywidgets
+# to show ticks
+import mplcursors
+%matplotlib widget
+fig, ax = plt.subplots()
+lines = ax.plot(result.seasonal)
+plt.xticks(rotation='vertical')
+mplcursors.cursor()
+plt.show()
 
 ```
 
