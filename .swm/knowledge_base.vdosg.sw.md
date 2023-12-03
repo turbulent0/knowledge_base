@@ -1,5 +1,5 @@
 ---
-l0dlid: vdosg
+el0dlid: vdosg
 title: knowledge_base
 
 file_version: 1.1.2
@@ -501,9 +501,42 @@ When git clone repo, then dvc pull to get data from my shared folder \_WORK. (al
 
 ### init, new
 
+https://medium.com/towards-data-science/python-init-is-not-a-constructor-a-deep-dive-in-python-object-creation-9134d971e334
+
 `__new__` is a static method that is responsible for creating a new instance of a class. It is called before `__init__` and is used to create and return the new object.
 
 `__init__` is an instance method that is called after the new and is used when we call created class
+
+```python
+classSimpleObject:
+  greet_name:str
+	class SimpleObject:
+  greet_name:str
+
+  def __new__(cls, *args, **kwargs):      # <-- newly added function
+    print("__new__ method")     
+    return super().__new__(cls)  
+
+  def __init__(self, name:str):
+    print("__init__ method")
+    self.greet_name = name
+
+  def say_hello(self) -> None:
+    print(f"Hello {self.greet_name}!")
+
+my_instance = SimpleObject(name="bob")
+my_instance.say_hello()
+```
+
+Notice that __new__ is being called on the super() method, which returns a “reference” (it’s actually a proxy-object) to the **parent-class of SimpleObject**. Remember that SimpleClass inherits from object, where the __new__method is defined.
+
+Breaking it down:
+
+1. we get a “reference” to the base class of the class we’re in. In the case of SimpleObject we get a “reference” to object
+2. We call __new__ on the “reference” so object.__new
+3. __We pass in cls as an argument.
+   This is how class methods like __new__ work; it’s a reference to the class itself
+   **cls** - reference to class, self - reference to curent instance
 
 ### magic methods
 
@@ -2015,51 +2048,6 @@ Yahoo webscope, kaggle, google datasets, FiveThirtyEight, githubs awesome, UCI, 
 
 Чем больше весов в вашей модели, тем больше требуется данных обучения.
 
-## ml functions and moduls
-
-* pairwise distances
-
-```python
-from sklearn.metrics import pairwise_distances
-D = pairwise_distances(X)
-```
-
-* from dateutil import parser
-  date = parser.parse("4th of July, 2015")
-* ! pd.cut() - divide continious feature in categories (bins)
-* pd.explode() - column of lists to columns with element of list
-* pd.qcut() - divide in quantiles, for categorical vars
-* df.nlargest - n largest elements in column
-* !assign(over\_three\_hours=lambda dataframe: np.where(dataframe\["duration"\] > 180, "Yes", "No")) # Create new column called over\_three\_hours depending on duration > 180 - !!! can use in **chain operation**
-
-```python
-# Group by a date column, use a monthly frequency 
-# and find the total revenue for `category`
-
-grouped = df.groupby(['category', pd.Grouper(key='date', freq='M')])
-monthly_revenue = grouped['revenue'].sum()
-```
-
-* Another function is `stack/unstack`, which can collapse/explode DataFrame indices. `crosstab` computes a cross-tabulation of two or more factors, and by default, computes a frequency table of the factors but can also compute other summary statistics.
-* np.allclose - compare two dataframes
-* np.split(indexes), np.hsplit(array, ind), np.vsplit(array, ind)
-* !head -4 data/president_heights.csv- shell command in ipynb
-* df.nbits, l.nbits
-* !!! numpy **broadcasting** to same dimensions
-
-for example pair wise difference = l1[np.newaxis, :] - l1.copy(:, np.newaxis) -> matrix of differences
-
-* !!! do not create additional column
-* counts, edges = np.histogram(x, bins)
-* from sklearn.manifold import Isomap
-
-  iso = Isomap(n_components=2)
-* numpy histogram
-
-  bins = np.linspace(-5, 5, 20)
-* clip(1000, 2000) - boundary for values in column
-* rank - ?
-
 ## append and concat
 
 Keep in mind that unlike the ``append()`` and ``extend()`` methods of Python lists, the ``append()`` method in Pandas does not modify the original object–instead it creates a new object with the combined data.
@@ -2152,9 +2140,63 @@ subset=["std"], cmap="Reds"
 subset=["50%"], cmap="coolwarm"
 )
 
-# Numpy
+# Useful modules, functions (python, DS)
 
-## lib.stride_tricks.as_strided - get deliberate slices of array
+## pandas functions
+
+- !combine_first
+
+  You want to extract a column from a DataFrame. If there are missing values in the column, you want to replace those missing values with a value from another column
+
+* from dateutil import parser
+  date = parser.parse("4th of July, 2015")
+* ! pd.cut() - divide continious feature in categories (bins)
+* pd.explode() - column of lists to columns with element of list
+* pd.qcut() - divide in quantiles, for categorical vars
+* df.nlargest - n largest elements in column
+
+## ml functions and moduls
+
+* pairwise distances
+
+```python
+from sklearn.metrics import pairwise_distances
+D = pairwise_distances(X)
+```
+
+* !assign(over\_three\_hours=lambda dataframe: np.where(dataframe\["duration"\] > 180, "Yes", "No")) # Create new column called over\_three\_hours depending on duration > 180 - !!! can use in **chain operation**
+
+```python
+# Group by a date column, use a monthly frequency 
+# and find the total revenue for `category`
+
+grouped = df.groupby(['category', pd.Grouper(key='date', freq='M')])
+monthly_revenue = grouped['revenue'].sum()
+```
+
+* Another function is `stack/unstack`, which can collapse/explode DataFrame indices. `crosstab` computes a cross-tabulation of two or more factors, and by default, computes a frequency table of the factors but can also compute other summary statistics.
+* np.allclose - compare two dataframes
+* np.split(indexes), np.hsplit(array, ind), np.vsplit(array, ind)
+* !head -4 data/president_heights.csv- shell command in ipynb
+* df.nbits, l.nbits
+* !!! numpy **broadcasting** to same dimensions
+
+for example pair wise difference = l1[np.newaxis, :] - l1.copy(:, np.newaxis) -> matrix of differences
+
+* !!! do not create additional column
+* counts, edges = np.histogram(x, bins)
+* from sklearn.manifold import Isomap
+
+  iso = Isomap(n_components=2)
+* numpy histogram
+
+  bins = np.linspace(-5, 5, 20)
+* clip(1000, 2000) - boundary for values in column
+* rank - ?
+
+## Numpy
+
+### lib.stride_tricks.as_strided - get deliberate slices of array
 
 https://uproger.com/prodvinutyj-numpy-ottachivajte-tryuki-s-shagami/
 
@@ -2165,17 +2207,15 @@ https://uproger.com/prodvinutyj-numpy-ottachivajte-tryuki-s-shagami/
 >>>
 >>
 
-# Useful modules (python, DS)
-
 ## Useful functions in sklearn, scipy
 
 sklearn.model_selection.TimeSeriesSplit - split time-series data
 
 sklearn.model_selection.permutation_test_score - score on cv with p-value
 
-
-
 ## Useful libraries
+
+! pynest - beyond fastapi
 
 pmdarima -autoarima for time series
 
@@ -2227,7 +2267,7 @@ plt.show()
 
 ```
 
-# Visualization
+## Visualization
 
 * visualize map in dash, dynamic
 
