@@ -1,5 +1,5 @@
 ---
-el0dlid: vdosg
+eлжel0dlid: vdosg
 title: knowledge_base
 
 file_version: 1.1.2
@@ -30,9 +30,93 @@ However, it's important to note:
 * Not all immutable objects are necessarily hashable. For instance, while tuples are immutable, they are only hashable if all their elements are hashable.
 * An object being immutable doesn't automatically mean it's suitable to be used as a dictionary key or in a set. It needs to be explicitly defined as hashable (e.g., by implementing the `__hash__` method in its class definition).
 
-### typing
+### typing, check types by python (not in runtime, only with mypy), check with mypy circular references of types(classes)
 
 Python is a [**dynamically typed**](https://en.wikipedia.org/wiki/Type_system#DYNAMIC) programming language, which means the types are only checked at runtime and a variable is allowed to change its type over its lifetime, whereas a [**statically typed**](https://en.wikipedia.org/wiki/Type_system#Static_type_checking) language like Java checks the types at compile time, and a variable is not allowed to change its type over its lifetime. On the other hand, Python is a [**strongly typed**](https://en.wikipedia.org/wiki/Strong_and_weak_typing) language because the types cannot be automatically converted at runtime. For example, you cannot have an addition calculation on integer `1` and string `"2"`, while in a **weakly typed** language such as JavaScript such calculation is allowed.
+
+When we write a program, we have two places we can check it for correctness: at compile time,
+
+and at runtime (you don’t have to plan out the *types* and *memory allocation* beforehand)
+
+Python doesn’t have the *compile-time check*, because it’s an interpreted language that is dynamically-typed
+
+A special constant that is assumed to be True by 3rd party static type checkers. It is False at runtime.
+
+TYPE_CHECKING = False
+
+One of the things we can do when type checking is happening is include conditional imports. Conditional imports are packages that are only imported when we’re doing typchecking. Why would we want to do this? [To avoid circular references.](https://stackoverflow.com/questions/61545580/how-does-mypy-use-typing-type-checking-to-resolve-the-circular-import-annotation)
+
+```python
+--------ClassA.py---------
+import classB
+
+class A:
+    def __init__(self, B_obj: "B") -> None:
+        pass
+---------------------------
+
+-------ClassB.py---------
+import classA
+
+class B:
+    def __init__(self, A_obj: 'A') -> None:
+        pass
+```
+
+*!!! checking circular reference -* types in quotes and conditional import of class with TYPE_CHECKING, and mypy understend it is types, but python doesn't care, because Python doesn't have type checking ( example with circular reference) - to solve
+
+```python
+
+---- classA.py-----
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ClassB import B
+
+class A:
+    def __init__(self, B_obj: Optional['B'] = None) -> None:
+        pass
+
+----classB.py----
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ClassA import A
+
+class B:
+    def __init__(self, A_obj: Optional['A']=None) -> None:
+        pass
+
+
+----main.py---
+from ClassA import A
+from ClassB import B
+
+# Create instances of A and B
+# Note: Since the constructors don't use the passed objects, we can pass `None` for now
+a_instance = A(None)
+b_instance = B(None)
+
+# Optionally, if A and B need to know about each other, you can set attributes after creation
+a_instance.B_obj = b_instance
+b_instance.A_obj = a_instance
+
+# Now a_instance and b_instance are instances of A and B, respectively, and know about each other
+
+```
+
+A and B reference each other, but the first time through the loop, B is not instantiated yet and so cannot be referenced. At run-time this would simply be ignored, because, remember, Python is dynamically-typed so it doesn’t care what the type is at run-time.
+
+this all mean in a TL;DR:
+
+1. Python type-checking is very strongly decoupled from the actual runtime code and is largely a user-level mechanism to make reading code much easier.
+2. Typechecking by mypy is more meticulous than the checking that happens at runtime, so we have to do hacks in order to get code that would otherwise run to pass typechecking, particularly when working with circular dependencies.
+3. Python doesn’t care about types at runtime, so we do another hack (types as strings) to make sure the code gets interpolated correctly using forward references [during typechecking and ignored at runtime.](https://peps.python.org/pep-0484/#forward-references). We can do this because MyPy will attempt to parse strings into their respective types.
+4. Be very careful when using type annotations. You should use them! But also understand that they are also built on some very loose guarantees.
+
+*Forward references*
+
+When a type hint contains names that have not been defined yet, that definition may be expressed as a string literal, to be resolved later.
 
 ### type annotation, type conversion (implicit and explicit)
 
@@ -129,6 +213,10 @@ Identity (is) and equality (==), can check by id(var), same or note memory cell
 ### Solid principles
 
 https://telegra.ph/Principy-SOLID-v-inzhenerii-dannyh-CHast-1-09-07
+
+### Anti-patterns
+
+most common anti-patterns in Python: [using mutable default arguments](http://docs.python-guide.org/en/latest/writing/gotchas/#mutable-default-arguments)
 
 ### Patterns
 
@@ -356,9 +444,9 @@ profiler (cprofiler) don't see lambda functions and can not check it performance
 
 has two magic methods (underscore method in class)
 
---enter()
+--enter--()
 
---close()
+--close--()
 
 ### Data classes
 
@@ -514,7 +602,7 @@ classSimpleObject:
   greet_name:str
 
   def __new__(cls, *args, **kwargs):      # <-- newly added function
-    print("__new__ method")     
+    print("__new__ method")   
     return super().__new__(cls)  
 
   def __init__(self, name:str):
@@ -537,6 +625,16 @@ Breaking it down:
 3. __We pass in cls as an argument.
    This is how class methods like __new__ work; it’s a reference to the class itself
    **cls** - reference to class, self - reference to curent instance
+
+### underscore naming
+
+_ - global var (not to intercept with same name in other files), non-public names
+
+__ - name mangling, when __method()  -> _ [ClassName]. _method() - !!! preventing name clashes in inheritance, not to override super class __method()
+
+var_ - trailing underscore, not to clash with python keyword or built-in names
+
+__ dunder __ - magic, special **methods**, call with special actions, supports internal python behaviour. Special attributes: --name-- - identifies module in import system, --file-- -file, from which module was loaded
 
 ### magic methods
 
@@ -691,6 +789,30 @@ Reducing coupling and promoting loose coupling is generally considered a good pr
 By reducing coupling and promoting loose coupling, you can create more flexible and maintainable software that is easier to modify, extend, and adapt to changing requirements.
 
 ## 4.Modules
+
+### venv environment
+
+```
+python -m venv /path/to/new/virtual/environment
+```
+
+source /Users/maxymusenko/Programming/test_venv/bin/activate
+
+### Scripts
+
+scripts  - interpreted at runtime rather than compiled, run with interpreter executing each order in sequence(python). !File designed to be execute. Code perfomes specific actions (func calls, loops, conditionals)
+
+module - file, designed to be imported, function and class definition
+
+when you run script as **executable**:
+
+1. chmod +x hello.py
+2. add #!/usr/bin/env python3  - safer and more portabel or #!/usr/bin/python3 (not the same path in all unix systems)
+3. ./hello.py
+
+importlib.reload(module)
+
+if __ name __ == '__ main __' - when you run file as script, you **passing file object** to Python interpreter. Global __ name __ is set to __ main __ when interpreter runs your code in **top_level code environment** (the first user-specified module that starts running)
 
 ### Installation
 
@@ -1023,6 +1145,23 @@ str.**with**? - search for method
 help(L.insert)
 
 # Statistic and probability
+
+## outliers
+
+ML:
+
+- LOF
+- Isolation forest
+- autoencoders
+
+univariate :
+z-score
+
+modified z-score
+
+grubbs test
+
+stl decomposition
 
 ## congugate prior
 
@@ -1370,6 +1509,37 @@ Unbiasedness means that the expectation of the estimator is equal to the populat
 
 Nitty-gritty imperative approach with control vs simplicity of declarative approach of AI
 
+## Groking
+
+The big surprise now is that neural networks approaching nearly perfect training accuracy, will upon further training, suddenly start to achieve generalisation. The first observation of grokking was made in 2022 in this [paper](https://arxiv.org/abs/2201.02177) by training a transformer on binary operations in finite modulo groups.Besides the observations regarding the effect of the binary operation characteristics and regularisation techniques, particularly interesting is that generalisation can be achieved even though the training set size is reduced.
+![alt text](image/knowledge_base.vdosg.sw/groking.webp)
+
+
+The authors analyse two families of circuits that can help the neural network perform well during training:
+
+1. Circuits that are good at generalising: These circuits learn patterns and rules that can be applied to new, unseen data. They don’t just memorise the training data, but actually understand the underlying concepts.
+2. Circuits that are good at memorising: These circuits are really good at remembering the specific examples from the training data, but they might not be as good at applying what they’ve learned to new situations.
+
+Both types of circuits can help the neural network achieve good performance during training. However, when the network has to choose between these two types of circuits, it prefers the ones that are more “efficient”. Efficiency here means that the circuit can produce strong outputs without needing too many parameters or too much complexity. Thus grokking is explained by the interplay of these circuits.
+
+In other words, by interpreting the gradients of a parameter as a discrete random signal, the authors can decompose this signal into two components: a fast-varying component and a slow-varying component. The first is responsible for overfitting, the latter is responsible for generalisation. A principle similar to two circuits as the cause for grokking. This principle now offers a pretty neat trick to accelerate convergence, by simply strengthen the influence of the slow varying component.
+
+
+## Casual inference
+
+He defines it as the study *of estimating the impact of events and choices on a given outcome of interest* . We are trying to establish the cause-and-effect relationship between variables (we can call them treatment and effect). It is a widespread problem in many areas, from business to public policy settings.
+
+Usually, the setup of the causality-finding framework is relatively simple and consists of:
+
+* treatment group — the group receiving the treatment
+* control group — a group we want to treat as our benchmark to assess the treatment effect
+* treatment — any activity directed to the treatment we wish to analyze
+* outcome of interest
+
+we are constantly looking for tools to help us find causal relationships. Research methods that tackle this problem are called **quasi-experiments.**
+
+In the rest of the article, we will focus on one of the most important and often used quasi-experimental methods: **difference-in-differences**
+
 ## Balance data
 
 - choose proper metric
@@ -1673,9 +1843,32 @@ https://huggingface.co/blog/tomaarsen/attention-sinks
 
 bse is faster, why?
 
+### F1 score
+
+bad when
+True Positive = 10
+False Negative = 0
+False Positive = 70
+True negative = 920
+F1 score = 0.22
+!!!When true negative is huge is bad, do not include True negative
+
 ### Auc roc
 
 TPR and FPR on axis
+
+its Type I error and 1 - Type II error
+
+if False Positive not ciritical!!
+Example for bad usage AucRoc
+True Positive = 10
+False Negative = 0
+False Positive = 70
+True negative = 120
+Auc Roc - 0.84
+F1 score - 0.22
+
+!!! you can track it by curve chart ( tpr = 1 after fpr > 0.5)
 
 > ROC is a **probability** curve and AUC represents the degree or measure of **separability.** It tells how much the model is capable of distinguishing between classes
 
@@ -1790,6 +1983,24 @@ Explicit regularization is regularization whenever one explicitly adds a term to
 
 ## Linear regression
 
+### whether use intercept or not
+
+Deciding whether to include an intercept in your regression model is an important consideration. The intercept represents the expected mean value of the dependent variable when all independent variables are set to zero. Here are some guidelines to help you decide whether to include an intercept:
+
+**Theoretical Considerations:** Consider the theoretical relationship between the variables. If a zero value for all independent variables logically implies a non-zero value for the dependent variable, an intercept should be included. For example, in a model predicting sales based on advertising spend, even with zero advertising, some baseline sales might still occur, suggesting the need for an intercept.
+
+**Empirical Consideration**s: Look at your data. If your dataset does not include observations where all independent variables are zero, it can be misleading to force the model to go through the origin (i.e., an intercept of zero). In such cases, including an intercept often produces a more accurate and generalizable model.
+
+**Model Fit and Performance:** Compare models with and without an intercept in terms of their fit and predictive performance. Statistical measures like R-squared, AIC (Akaike Information Criterion), or BIC (Bayesian Information Criterion) can help evaluate which model is more appropriate. A model with an intercept often fits the data better unless there's a strong theoretical reason to exclude it.
+
+**Statistical Tests:** Conduct hypothesis testing. If you include an intercept, you can test whether its coefficient is significantly different from zero. A significant intercept indicates that it should be part of the model.
+
+**Interpretability:** Consider how the presence or absence of an intercept affects the interpretability of your model. Without an intercept, the effect of each predictor is interpreted as its effect when all other predictors are zero, which might not always be meaningful.
+
+**Domain Knowledge:** Utilize domain-specific knowledge. In certain fields or situations, there might be established practices or theoretical justifications for including or omitting the intercept.
+
+For your specific case in a Poisson regression model, the decision also depends on the nature of your dependent variable (units) and the context of your analysis. If the context implies that having all predictors at zero still results in a non-zero count of units, then an intercept should be included. Otherwise, if a zero count is expected when all predictors are zero, you might consider omitting the intercept. However, omitting the intercept should be done with caution and solid justification, as it can lead to biased estimates of your regression coefficients.
+
 ### regression
 
 regression means regress (step back ) to the best fit line (co-relation line)
@@ -1846,6 +2057,87 @@ You have several variables that are positively correlated with your response, an
 Generator and classificator - loss as difference between gerenated image and input image, classificator tries to find difference between input and generated image
 
 # Databases, pandas, DataFrame
+
+## Dataclass from python 3.7
+
+https://realpython.com/python-data-classes/
+
+```python
+from dataclasses import dataclass
+```
+
+```python
+from dataclasses import make_dataclass
+```
+
+!!! adds comparision and representation compare with regular class, only difference `.__init__()`, `.__repr__()`, and `.__eq__()`
+
+best alternative for small data- named tuple
+
+attr library
+
+```python
+import attr
+
+@attr.s
+class AttrsCard:
+    rank = attr.ib()
+    suit = attr.ib()
+```
+
+1) set default values
+
+```python
+sort_index: int = field(init=False, repr=False)
+```
+
+```python
+cards: List[PlayingCard] = field(default_factory=make_french_deck)
+```
+
+2) @dataclass(frozen=True) - set immutable dataclass (dataclass.rank=1 - > error)
+3) set ordering for comparision of instances(new attribute - sort_index, not init, not repr, first for sorting as *first* argument)
+
+```python
+from dataclasses import dataclass, field
+
+RANKS = '2 3 4 5 6 7 8 9 10 J Q K A'.split()
+SUITS = '♣ ♢ ♡ ♠'.split()
+
+@dataclass(order=True)
+class PlayingCard:
+    sort_index: int = field(init=False, repr=False)
+    rank: str
+    suit: str
+
+    def __post_init__(self):
+        self.sort_index = (RANKS.index(self.rank) * len(SUITS)
+                           + SUITS.index(self.suit))
+
+    def __str__(self):
+        return f'{self.suit}{self.rank}
+```
+
+4)optimization
+
+I’m going to end this tutorial with a few words about [slots](https://docs.python.org/reference/datamodel.html#slots). Slots can be used to make classes faster and use less memory.br
+
+```python
+from dataclasses import dataclass
+
+@dataclass
+class SimplePosition:
+    name: str
+    lon: float
+    lat: float
+
+@dataclass
+class SlotPosition:
+    __slots__ = ['name', 'lon', 'lat']
+    name: str
+    lon: float
+    lat: float
+```
 
 ## eval, query
 
@@ -2250,6 +2542,15 @@ poetry - package manager (all dependencies in .toml file, if you want reinstall 
 
 imblearn - pip install imbalanced-learn - library for SMOTE
 
+**check size of objects**
+
+```python
+from pympler import asizeof
+simple = SimplePosition('London', -0.1, 51.5)
+slot = SlotPosition('Madrid', -3.7, 40.4)
+asizeof.asizesof(simple, slot)
+```
+
 mplcursors - for annotation visualitationI
 
 ```python
@@ -2468,6 +2769,66 @@ print(dijkstra(graph, 'A'))
 ```
 
 # Computer science
+
+## buffer protocol
+
+Buffer - underlaying memory array, pointer to the raw underlying data
+
+Certain objects available in Python wrap access to an underlying memory array or  *buffer* . Such objects include the built-in [`<span class="pre">bytes</span>`](https://docs.python.org/3/library/stdtypes.html#bytes "bytes") and [`<span class="pre">bytearray</span>`](https://docs.python.org/3/library/stdtypes.html#bytearray "bytearray"), and some extension types like [`<span class="pre">array.array</span>`](https://docs.python.org/3/library/array.html#array.array "array.array"). Third-party libraries may define their own types for special purposes, such as image processing or numeric analysis.
+
+While each of these types have their own semantics, they share the common characteristic of being backed by a possibly large memory buffer. It is then desirable, in some situations, to access that buffer directly and without intermediate copying.
+
+Python provides such a facility at the C level in the form of the [buffer protocol](https://docs.python.org/3/c-api/buffer.html#bufferobjects). This protocol has two sides:
+
+* on the producer side, a type can export a “buffer interface” which allows objects of that type to expose information about their underlying buffer. This interface is described in the section [Buffer Object Structures](https://docs.python.org/3/c-api/typeobj.html#buffer-structs);
+* on the consumer side, several means are available to obtain a pointer to the raw underlying data of an object (for example a method parameter).
+
+To implement buffer protocol in python
+
+1) write func in C
+2) gcc -shared -fPIC -O3 -o cruncher.so cruncher.c
+3) The `-fPIC` flag makes the compiler generate [position-independent code](https://en.wikipedia.org/wiki/Position-independent_code), which is required for loading a dynamic-link library into another process, whereas `-O3` enables optimizations
+4) use func in python file (python_theory folder) with library ctypes and  Pass a Python array’s **pointer** to a C function
+
+## arrays in computer science
+
+https://realpython.com/preview/python-array/
+
+!!! Arrays are data structure for list ADT.
+
+* **Homogeneous:** All elements in an array share a common data type, allowing them to have a uniform size. This is different from Python lists, which are allowed to contain elements of mixed types.
+* **Contiguous:** Array elements are adjacent to each other in the computer memory, occupying a [contiguous block](https://docs.python.org/3/glossary.html#term-contiguous) of memory space. No other data is allowed between the beginning and the end of an array. Such a layout corresponds to the way your computer memory is logically organized.
+  *Contiguous - In one-dimensional arrays, the items must be laid out in memory next to each other, in order of increasing indexes starting from zero.*
+* **Fixed-Size:** Because other data may follow immediately after the block of memory occupied by your array, expanding the block would overwrite that data, potentially causing severe errors or malfunctions. Therefore, when you allocate memory for an array, you must know its size up front without the possibility to change it later.
+
+The first two traits make the array a [random-access](https://en.wikipedia.org/wiki/Random_access) data structure, letting you instantly retrieve an element at any given index without having to traverse the whole array, is the ability to access an arbitrary element of a sequence in equal time, data structure designed to provide O(1) access time to elements
+
+the list abstract data type using either an [array](https://en.wikipedia.org/wiki/Array_(data_structure)) or a [linked list](https://realpython.com/linked-lists-python/). Both are sequences of elements, but arrays will be more suitable in scenarios involving frequent lookups, while linked lists will work better when you anticipate a greater number of insertions or deletions.
+
+## ADT, data structures and data types
+
+Computer science models collections of data as [abstract data types (ADTs)](https://en.wikipedia.org/wiki/Abstract_data_type) that support certain operations like insertion or deletion of elements
+
+The word *abstract* in this context means these data types leave the implementation details up to you, only defining the expected semantics or the set of available operations that an ADT must support. As a result, you can often represent one abstract data type (for user) using a few alternative [data structures](https://en.wikipedia.org/wiki/Data_structure) (for developer), which are concrete implementations of the same conceptual approach to organizing data.
+
+Python [`dict`](https://realpython.com/python-dicts/) data type is a [hash table](https://en.wikipedia.org/wiki/Hash_table) data structure that implements the [dictionary](https://en.wikipedia.org/wiki/Associative_array) abstract data type.
+
+The **dictionary problem** is the classic problem of designing efficient [data structures](https://en.wikipedia.org/wiki/Data_structure "Data structure") that implement associative arrays. The two major solutions to the dictionary problem are [hash tables](https://en.wikipedia.org/wiki/Hash_table "Hash table") and [search trees](https://en.wikipedia.org/wiki/Search_tree "Search tree")
+
+To reiterate the meaning of these terms, **abstract data types** define the desired semantics, **data structures** implement them, and **data types** represent data structures in programming languages as built-in syntactic constructs
+
+Some of the most common examples of abstract data types include these:
+
+* [Dictionaries](https://realpython.com/python-hash-table/#hash-table-vs-dictionary)
+* [Graphs](https://realpython.com/python-maze-solver/#install-the-networkx-library)
+* [Lists](https://en.wikipedia.org/wiki/List_(abstract_data_type))
+* [Queues](https://realpython.com/queue-in-python/)
+* [Sets](https://realpython.com/python-sets/)
+* [Stacks](https://realpython.com/how-to-implement-python-stack/)
+* [Trees](https://en.wikipedia.org/wiki/Tree_(data_structure))
+* [String](https://en.wikipedia.org/wiki/String_(computer_science))
+* [Map](https://en.wikipedia.org/wiki/Associative_array "Associative array")
+* [Priority queue](https://en.wikipedia.org/wiki/Priority_queue "Priority queue")
 
 ## Pigionhole principle(dirichle principle)
 
