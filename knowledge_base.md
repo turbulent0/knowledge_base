@@ -2994,3 +2994,16 @@ nonlinear trends within each variable (such as disinclination to ride at very co
 finer-grained information (such as the difference between a rainy morning and a rainy afternoon)
 
 correlations between days (such as the possible effect of a rainy Tuesday on Wednesday's numbers, or the effect of an unexpected sunny day after a streak of rainy days)
+
+## Time series
+### find frequencies
+ACF/PACF
+domain knowladge
+spectrum analisys (with Fourie transform)
+
+### slope
+slope = COV(x,y) / Var (x)
+slope = corr * std(y) / std(x)
+
+### affinity func vs linear func
+linear func has intercept 0, and y = ax, affine has intercept y = b + ax
