@@ -2056,7 +2056,7 @@ You have several variables that are positively correlated with your response, an
 
 Generator and classificator - loss as difference between gerenated image and input image, classificator tries to find difference between input and generated image
 
-# Databases, pandas, DataFrame
+# Datasets, pandas, DataFrame
 
 ## Dataclass from python 3.7
 
